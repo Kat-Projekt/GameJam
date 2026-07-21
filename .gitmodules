@@ -1,0 +1,4 @@
+[submodule "engine"]
+	path = engine
+	url = https://github.com/Kat-Projekt/ReKat.git
+	branch = Engine
