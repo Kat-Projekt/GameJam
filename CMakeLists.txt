@@ -2,6 +2,14 @@ cmake_minimum_required ( VERSION 3.13 )
 
 project ( ReKat_GameJam )
 
-add_subdirectory ( Engine )
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-KAT_project ( GameJam PATH ${CMAKE_CURRENT_SOURCE_DIR} )
+add_subdirectory ( engine )
+
+KAT_project (
+	GameJam
+	PATH ${CMAKE_CURRENT_SOURCE_DIR}
+	RESOURCES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/resources
+)
