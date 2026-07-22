@@ -1,18 +1,22 @@
+#define DIAGNOSTIC
 #include "engine.hpp"
 
 int main ( )
 {
+	Factory::Register_Directory ( "." );
+
 	ReKat::Graphik::Start ( "Font Test", 800, 600 );
 	Manager::Defaults_Load ( );
 	DEBUG ( 3, "Started" );
+
+	Manager::Make < Texture > ( "logo", "Logo.png" );
 	Manager::Make < Font > ( "Aovel", "AovelSansRounded.ttf", 90 );
 
-	Manager::Objekt_Load ( "Testo", {0,0,0} )
-		->Add_Component < Text > ( )
-			->Set ( "Aovel", "" )
-			->Set ( "Hello\nWorld", Text::CENTER );
+	Manager::Objekt_Load ( "End Credits" )->Add_Component ( "EndScreen" );
 
-	Manager::Set_Active_Scene ( "Testo" );
+	DEBUG ( 4, "STARTING" );
+
+	Manager::Set_Active_Scene ( "End Credits" );
 
 	while ( ReKat::Graphik::Is_End ( ) )
 	{
@@ -22,5 +26,5 @@ int main ( )
 	}
 
 	Manager::Free ( );
-	Manager::Free_Objekt ( "Testo" );
+	Manager::Free_Objekt ( "End Credits" );
 }
