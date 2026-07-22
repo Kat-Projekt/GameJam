@@ -23,6 +23,16 @@ public:
 		auto bg = Manager::Objekt_Load ( "EndScreen_Background", { 0,-50*(new_line-1),0 }, {200,100*new_line,100} );
 		bg->Add_Component < Sprite > ( )->Set ( vec4{0,0,0,1} );
 
+		Manager::Make < Animation < vec3 > > ( "scrool", bg->Expose_Pos ( ), PlayMode::ONCE );
+		auto scrool = Manager::Get < Animation < vec3 > > ( "scrool" );
+		scrool	->Add_Frame ( vec3{0,-50*(new_line-1),0 }, vec3{1000,-1000,0}, 10 )
+			->Add_Frame ( vec3{0,-100,0}, vec3{0,-100,0}, 3 );
+
+		obj->Add_Component < Animator > ( )
+			->New_Node ( "splash" )
+			->Change_Animation ( "splash" )
+			->Add_Animation ( "splash", scrool );
+
 		obj->Add_Child ( bg );
 		obj->Set_Pos ( {0,0,0} );
 

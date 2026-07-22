@@ -22,6 +22,9 @@ int main ( )
 	{
 		ReKat::Graphik::Clear_Screen ( 1.0f );
 		Manager::Update ( );
+		Timer::Update ( );
+		DEBUG ( 4, Timer::Get_Time ( ) );
+		DEBUG ( 4, Timer::delta_time );
 		ReKat::Graphik::Update ( );
 	}
 
