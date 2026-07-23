@@ -4,10 +4,10 @@ class Runner : public Behaviour
 {
 public:
 	enum class State {
-        Idle,           // Fermo in pausa
-        MovingRandom,   // In movimento in una direzione casuale per un tempo t
-        ChasingEnemy    // Inseguimento del nemico (priorità)
-    };
+		Idle,           // Fermo in pausa
+		MovingRandom,   // In movimento in una direzione casuale per un tempo t
+		ChasingEnemy    // Inseguimento del nemico (priorità)
+	};
 
 	Runner ( )
 	{
@@ -16,42 +16,42 @@ public:
 private:
 	/* data */
 	// --- PARAMETRI DI CONFIGURAZIONE ---
-    float move_speed = 100.0f;        // Velocità di movimento
-    float detection_radius = 200.0f;  // Raggio rilevamento nemici
+	float move_speed = 100.0f;        // Velocità di movimento
+	float detection_radius = 200.0f;  // Raggio rilevamento nemici
 
-    // Limiti di tempo per il movimento casuale
-    float min_move_time = 1.5f;       // Tempo minimo di camminata
-    float max_move_time = 4.0f;       // Tempo massimo di camminata
+	// Limiti di tempo per il movimento casuale
+	float min_move_time = 1.5f;       // Tempo minimo di camminata
+	float max_move_time = 4.0f;       // Tempo massimo di camminata
 
-    // Limiti di tempo per la pausa
-    float min_pause_time = 1.0f;      // Pausa minima
-    float max_pause_time = 3.0f;      // Pausa massima
+	// Limiti di tempo per la pausa
+	float min_pause_time = 1.0f;      // Pausa minima
+	float max_pause_time = 3.0f;      // Pausa massima
 
-    // --- STATO ATTUALE ---
-    State current_state = State::Idle;
-    
-    Objekt* enemy_target = nullptr;   // Puntatore al nemico più vicino
-    glm::vec3 wander_dir = {0,0,0};   // Vettore direzione casuale (normalizzato)
-    
-    float state_timer = 0.0f;         // Timer generico (usato per pause o tempo di camminata)
+	// --- STATO ATTUALE ---
+	State current_state = State::Idle;
+	
+	Objekt* enemy_target = nullptr;   // Puntatore al nemico più vicino
+	glm::vec3 wander_dir = {0,0,0};   // Vettore direzione casuale (normalizzato)
+	
+	float state_timer = 0.0f;         // Timer generico (usato per pause o tempo di camminata)
 	//setup: atttach sprite, rigid body, collider
 	//update: target position, target, 
 
 	float Get_Random_Float(float min, float max)
-    {
-        float scale = (float)rand() / RAND_MAX;
-        return min + scale * (max - min);
-    }
+	{
+		float scale = (float)rand() / RAND_MAX;
+		return min + scale * (max - min);
+	}
 
 	float Get_Random_Move()
-    {
-        return Get_Random_Float(min_move_time, max_move_time);
+	{
+		return Get_Random_Float(min_move_time, max_move_time);
 	}
 
 	float Get_Random_Pause()
-    {
-        return Get_Random_Float(min_pause_time, max_pause_time);
-    }
+	{
+		return Get_Random_Float(min_pause_time, max_pause_time);
+	}
 
 	void Pick_Random_Direction()
 	{
@@ -82,7 +82,7 @@ private:
         auto active_scene = Manager::Objekt_Get("Main scene");
 		if (!active_scene) return;
 
-		auto runners = active_scene->Get_Components_Recursive<Runner>();
+		auto runners = active_scene->Get_Component_Recursive<Runner>();
 
 		for (Runner* current_candidate_runner : runners)
 		{
@@ -138,7 +138,7 @@ private:
         }
     }
 
-	void Update_Idle(int dt) 
+	void Update_Idle ( float dt) 
 	{
 		state_timer -= dt;
 		if (state_timer <= 0.0f)
@@ -149,10 +149,10 @@ private:
 		}
 	}
 
-	void Update_MovingRandom(int dt) 
+	void Update_MovingRandom( float dt) 
 	{
 		glm::vec3 displacement = wander_dir * move_speed * dt;
-    	obj->Inc_Pos(displacement);
+    		obj->Inc_Pos(displacement);
 
 		state_timer -= dt;
 		if (state_timer <= 0.0f)
@@ -186,41 +186,28 @@ public:
 
 
 	void Start() override
-    {
-        state_timer = Get_Random_Pause();
-
-    }
-
-    void Update() override
-    {
-       Scan_For_Targets()
-
-	   float dt = Graphik::Manager::Get_Delta_Time();
-
-	   switch (current_state)
-    {
-        case State::Idle:
-            Update_Idle(dt);
-            break;
-
-        case State::MovingRandom:
-            Update_MovingRandom(dt);
-            break;
-
-        case State::ChasingEnemy:
-            Update_ChasingEnemy(dt);
-            break;
-    }
-    }
+	{
+		state_timer = Get_Random_Pause();
 	}
 
-	void Start ( )
+	void Update ( ) override
 	{
+		Scan_For_Targets ( );
+		float dt = Timer::Get_Delta ( );
 
-	}
+		switch (current_state)
+		{
+			case State::Idle:
+			Update_Idle(dt);
+			break;
 
-	void Update ( )
-	{
-		
+			case State::MovingRandom:
+			Update_MovingRandom(dt);
+			break;
+
+			case State::ChasingEnemy:
+			Update_ChasingEnemy(dt);
+			break;
+		}
 	}
 };

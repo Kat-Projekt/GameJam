@@ -17,6 +17,6 @@ public:
 		Manager::Objekt_Load ( "Background" );
 		Manager::Objekt_Load ( "Runners" );
 		Manager::Objekt_Load ( "Donators" );
-		Manager::Objekt_Load ( "UI" );
+		Manager::Objekt_Load ( "UI" )->Add_Component ( "Chat" );
 	}
 };
