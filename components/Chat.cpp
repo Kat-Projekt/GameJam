@@ -9,4 +9,6 @@ public:
 	{
 		Informations = { "Chat", 1.0, "The Chat interface" };
 	}
+
+	void Post ( std::string user, std::string message ) { }
 };

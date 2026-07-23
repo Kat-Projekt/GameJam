@@ -10,4 +10,6 @@ public:
 	{
 		Informations = { "Beater", 1.0, "The Count down / life manager" };
 	}
+
+	void Reward ( int value ) { }
 };
