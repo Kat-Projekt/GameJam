@@ -153,7 +153,7 @@ private:
 	void Update_Idle ( float dt) 
 	{
 		runner->Stay();
-		
+
 		state_timer -= dt;
 		if (state_timer <= 0.0f)
 		{
@@ -215,7 +215,7 @@ public:
 			break;
 
 			case State::ChasingEnemy:
-			Update_ChasingEnemy(dt);
+			Update_ChasingEnemy();
 			break;
 		}
 	}
