@@ -1,0 +1,15 @@
+Bar:
+	Runners: {
+		"P1",
+		"P2",
+		"Pippo"
+	}
+	Donors: {
+		"D1",
+		"Franco"
+	}
+	Camera: {
+		{ {0,0,0}, 1, "default" },
+		{ {0,500,0}, 1, "retro" }
+	}
+	Map: "tilemap.csv"

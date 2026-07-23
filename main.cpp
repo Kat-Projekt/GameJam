@@ -1,38 +1,72 @@
 #define DIAGNOSTIC
 #include "engine.hpp"
 
-int main ( )
+int load ( )
 {
+	int result = 0;
+
 	Factory::Register_Directory ( "." );
 
-	ReKat::Graphik::Start ( "Font Test", 800, 600 );
+	result += Manager::Defaults_Load ( );
+	if ( result ) { DEBUG ( 1, "FAILED TO LOAD DEFAULTS" ); }
+
+	// textures
+	result += Manager::Make < Texture > ( "logo", "Logo.png" );
+	result += Manager::Make < Texture > ( "noise", "noise.png", 1 );
+	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
+
+	// shaders
+	result += Manager::Make < Shader > ( "crt_effect", "Shaders/crt_effect.vs", "Shaders/crt_effect.fs" );
+	if ( result ) { DEBUG ( 1, "FAILED TO LOAD SHADERS" ); }
+
+	// fonts
+	result += Manager::Make < Font > ( "Aovel", "AovelSansRounded.ttf", 90 );
+	if ( result ) { DEBUG ( 1, "FAILED TO LOAD FONT" ); }
+
+	return result;
+}
+
+void __FreamBufferResize (GLFWwindow* window, int width, int heigth ) {
+	Manager::Objekt_Get ( "FrameBuffer" )
+		->Get_Component < Framebuffer > ( )
+		->Set ( width, heigth );
+}
+
+int main ( )
+{
+	ReKat::Graphik::Start ( "Font Test", 800, 600, false, false, true );
+	ReKat::Graphik::_current_window->input._FreamBufferResize = __FreamBufferResize;
 	// ReKat::phisiks::Start ( 60 );
 
-	Manager::Defaults_Load ( );
-	DEBUG ( 3, "Started" );
+	load ( );
 
-	Manager::Make < Texture > ( "logo", "Logo.png" );
-	Manager::Make < Font > ( "Aovel", "AovelSansRounded.ttf", 90 );
+	Manager::Objekt_Load ( "Main menu" )->Add_Component ( "MainMenu" );
 
-	// Manager::Objekt_Load ( "End Credits" )->Add_Component ( "EndScreen" );
+	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
+		->Set ( 800,600 )
+		.Set ( "crt_effect", "", true )
+		.Set ( Manager::Objekt_Get ( "Main menu" ) );
 
-	auto player = Manager::Objekt_Load ( "Player" );
-	player->Add_Component ( "Player" );
-	player->Add_Component < Sprite > ( )->Set ( "logo" );
+	// Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Sprite > ( )->Set ( "logo", "crt_effect" ).Set ( true );
 
-	DEBUG ( 4, "STARTING" );
+	Manager::Set_Active_Scene ( "FrameBuffer" );
 
-	Manager::Set_Active_Scene ( "Player" );
+	Manager::Get < Shader > ( "crt_effect" )->setInt ( "screenTexture", 0 );
+	Manager::Get < Shader > ( "crt_effect" )->setInt ( "noiseTexture", 1 );
+	Manager::Get < Shader > ( "crt_effect" )->setFloat ( "time", 0 );
 
 	while ( ReKat::Graphik::Is_End ( ) )
 	{
-		ReKat::Graphik::Clear_Screen ( 1.0f );
+		ReKat::Graphik::Clear_Screen ( 0.0f );
 		Manager::Update ( );
+
+		Manager::Get < Texture > ( "noise" )->Use ( );
+		Manager::Get < Shader > ( "crt_effect" )->setFloat ( "time", Timer::Get_Time ( ) );
 		// ReKat::phisiks::Update ( );
 		Timer::Update ( );
 		ReKat::Graphik::Update ( );
 	}
 
 	Manager::Free ( );
-	Manager::Free_Objekt ( "Player" );
+	Manager::Free_Objekts ( );
 }

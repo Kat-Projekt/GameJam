@@ -5,7 +5,7 @@
 class Player : public Behaviour
 {
 private:
-	float speed = 200;
+	float speed = 200.0f;
 public:
 	Player ( )
 	{
@@ -27,10 +27,12 @@ public:
 		if ( ReKat::Graphik::Key_Pressed( "S" ) ) { dpos += glm::vec2{0,-1}; }
 
 		if ( dpos != vec2{0,0} ) { dpos = normalize ( dpos ); }
-		// obj->Get_Component < Rigidbody > ( )->velocity = ( vec3 ( dpos * speed, 0 ) );
-		obj->Inc_Pos ( vec3{dpos,0} * speed * (float)Timer::delta_time );
+		vec2 new_move = dpos * speed * (float)Timer::delta_time;
 
-		DEBUG ( 4, obj->Get_Pos ( ) );
+		// obj->Get_Component < Rigidbody > ( )->velocity = ( vec3 ( dpos * speed, 0 ) );
+		obj->Inc_Pos ( vec3 {new_move.x,new_move.y,0} );
+
+		DEBUG ( 4, obj->Get_Pos ( ), new_move, (float)Timer::Get_Delta ( ), Timer::Get_Time ( ) );
 	}
 
 	void Collision_Trigger ( Objekt * _obj )
