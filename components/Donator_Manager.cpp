@@ -17,9 +17,16 @@ struct Donator
 	std::unordered_map < std::string, int > affinities;
 	std::string name;
 
-	void Increase_Affinity ( std::string player, int value )
+	void Increase_Affinity ( std::string runner, int value )
 	{
-
+		if ( affinities.find ( runner ) == affinities.end ( ) )
+		{ 
+			affinities [ runner ] = value;
+		}
+		else
+		{
+			affinities [ runner ] = value * value / affinities [ runner ];
+		}
 	}
 };
 
@@ -78,7 +85,7 @@ public:
 			if ( Timer::Get_Time_d ( ) > dono.time )
 			{
 				obj->Get_Component < Chat > ( )->Post 
-				( dono.dono->donator->name, dono.dono->GetMessage ( ) );
+				( dono.dono->donator->name, dono.dono->GetMessage ( ), true );
 
 				dono.dono->donator->Increase_Affinity ( dono.player, dono.dono->value );
 

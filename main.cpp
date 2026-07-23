@@ -40,7 +40,7 @@ int main ( )
 
 	load ( );
 
-	Manager::Objekt_Load ( "Main menu", vec3{630,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
+	Manager::Objekt_Load ( "Main menu", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
