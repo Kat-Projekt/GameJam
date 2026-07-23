@@ -10,5 +10,6 @@ public:
 		Informations = { "Weapon", 1.0, "This is the weapons information" };
 	}
 
-	void Swing ( );
+	virtual int Swing ( );
+	virtual int Throw ( );
 };

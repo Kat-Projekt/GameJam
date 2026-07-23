@@ -1,7 +1,7 @@
 #include <engine.hpp>
 
 #include "Chat.cpp"
-#include "Beater.cpp"
+#include "Runner.cpp"
 
 enum class Donation_event
 {
@@ -90,7 +90,7 @@ public:
 				dono.dono->donator->Increase_Affinity ( dono.player, dono.dono->value );
 
 				Manager::Objekt_Get ( dono.player )
-					->Get_Component < Beater > ( )
+					->Get_Component < Runner > ( )
 					->Reward ( dono.dono->value );
 			}
 		}
