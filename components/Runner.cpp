@@ -18,14 +18,18 @@ private:
 	// --- PARAMETRI DI CONFIGURAZIONE ---
 	float move_speed = 100.0f;        // Velocità di movimento
 	float detection_radius = 200.0f;  // Raggio rilevamento nemici
+	float stopping_distance = 1.0f;   // distanza minima dal target
 
 	// Limiti di tempo per il movimento casuale
-	float min_move_time = 1.5f;       // Tempo minimo di camminata
-	float max_move_time = 4.0f;       // Tempo massimo di camminata
+	const float min_move_time = 1.5f;       // Tempo minimo di camminata
+	const float max_move_time = 4.0f;       // Tempo massimo di camminata
 
 	// Limiti di tempo per la pausa
-	float min_pause_time = 1.0f;      // Pausa minima
-	float max_pause_time = 3.0f;      // Pausa massima
+	const float min_pause_time = 1.0f;      // Pausa minima
+	const float max_pause_time = 5.0f;      // Pausa massima
+
+	// Timer cooldown
+	const float max_cooldown_timer = 3.0f;   // Timer cooldown chase
 
 	// --- STATO ATTUALE ---
 	State current_state = State::Idle;
@@ -34,6 +38,7 @@ private:
 	glm::vec3 wander_dir = {0,0,0};   // Vettore direzione casuale (normalizzato)
 	
 	float state_timer = 0.0f;         // Timer generico (usato per pause o tempo di camminata)
+	float cooldown_timer = 0.0f;      // Timer cooldown da chase dopo collisioni
 	//setup: atttach sprite, rigid body, collider
 	//update: target position, target, 
 
@@ -73,6 +78,16 @@ private:
 
 	void Scan_For_Targets()
     {
+		if (cooldown_timer > 0.0f) 
+		{	
+			if( current_state == State::ChasingEnemy )
+			{
+				current_state = State::Idle;
+            	state_timer = Get_Random_Pause();
+			}
+			return;
+		}
+
         Objekt* closest_enemy = nullptr;
         float min_distance = detection_radius;
 
@@ -161,26 +176,30 @@ private:
 			current_state = State::Idle;
 		}
 	}
-	void Update_ChasingEnemy(float dt)
+void Update_ChasingEnemy(float dt)
+{
+	if (!enemy_target) return;
+
+	glm::vec3 my_pos = obj->Get_Pos();
+	glm::vec3 target_pos = enemy_target->Get_Pos();
+
+	glm::vec3 chase_dir = target_pos - my_pos;
+	float dist = glm::length(chase_dir);
+
+	float distance_to_cover = dist - stopping_distance;
+
+	if (distance_to_cover > 0.0f)
 	{
-		// 1. Verifichiamo che il bersaglio sia ancora un puntatore valido
-		if (!enemy_target) return;
+		chase_dir = glm::normalize(chase_dir);
 
-		glm::vec3 my_pos = obj->Get_Pos();
-		glm::vec3 target_pos = enemy_target->Get_Pos();
+		
+		float desired_step = move_speed * dt;
+		float actual_step = glm::min(desired_step, distance_to_cover);
 
-		// 2. Calcoliamo il vettore direzione verso il nemico
-		glm::vec3 chase_dir = target_pos - my_pos;
-		float dist = glm::length(chase_dir);
-
-		// 3. Se non siamo esattamente sopra al bersaglio, ci muoviamo verso di lui
-		if (dist > 0.0001f)
-		{
-			chase_dir = glm::normalize(chase_dir);
-			glm::vec3 displacement = chase_dir * move_speed * dt;
-			obj->Inc_Pos(displacement);
-		}
+		glm::vec3 displacement = chase_dir * actual_step;
+		obj->Inc_Pos(displacement);
 	}
+}
 
 public:
 
@@ -192,8 +211,15 @@ public:
 
 	void Update ( ) override
 	{
-		Scan_For_Targets ( );
+		
 		float dt = Timer::Get_Delta ( );
+
+		if ( cooldown_timer > 0.0f )
+		{
+			cooldown_timer -= dt;
+		}
+
+		Scan_For_Targets ( );
 
 		switch (current_state)
 		{
