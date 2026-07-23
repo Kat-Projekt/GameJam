@@ -2,19 +2,15 @@
 
 class Runner : public Behaviour
 {
+private:
+	float move_speed = 200.0f;
 public:
-
 	Runner ( )
 	{
 		Informations = { "Runner", 1.0, "The ai for the enemy runners" };
 	}
-private:
-	float move_speed = 100.0f;        // Velocità di movimento
 
-public:
-
-
-	void Start() override
+	void Start ( ) override
 	{
 		
 	}
@@ -24,11 +20,11 @@ public:
 		
 	}
 
-	set target
+	void SetTarget ( vec3 target_position );
+	void SetAttackDirection ( vec3 attack_direction );
 
-	swing weapon
+	void Swing ( );
+	void Throw ( );
 
-	throw weapon act
-
-	
+	void PickWeapon ( );
 };

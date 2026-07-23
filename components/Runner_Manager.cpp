@@ -11,7 +11,26 @@ public:
 		Informations = { "Runner_Manager", 1.0, "The Count down / life manager" };
 	}
 
-	void Register ( std::string name, vec3 spawn_point, std::string controller );
+	void Register (
+		std::string name,
+		std::string sprite_test,
+		std::string sprite_gambe,
+		vec3 spawn_point,
+		std::string controller
+	) {
+		auto _gambe = Manager::Objekt_Load ( name, spawn_point );
+		auto _testa = std::make_shared < Objekt > ( "testa" );
 
-	void Register_weapon ( std::string weapon_name, vec3 spawn_point );
+		_gambe->Add_Component < Sprite > ( );
+		_gambe->Add_Component ( "Runner" );
+		_gambe->Add_Component ( controller );
+
+
+
+		_gambe->Add_Child ( _testa );
+		obj->Add_Child ( _gambe );
+	}
+
+
+	void Register_weapon ( std::string weapon_name, int sprite_number, vec3 spawn_point );
 };
