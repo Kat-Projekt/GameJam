@@ -14,8 +14,7 @@ public:
 
 	void Start ( )
 	{
-		// obj->Add_Component < Rigidbody > ( );
-		// obj->Add_Component < Box_Collider > ( )->Set_Size ( obj->Get_Size ( ) );
+
 	}
 
 	void Update ( )
