@@ -7,12 +7,12 @@ private:
 	float time = 30.0f;
 	std::string displaid_time = "";
 
-	Text* _text = nullptr;
+	Text* _text_text = nullptr;
 	Rigidbody* _rigid = nullptr;
 
-	vec3 _target_position = 0;
+	vec3 _target_position = {0,0,0};
 
-	vec3 _attack_point = 0;
+	vec3 _attack_point = {0,0,0};
 public:
 	Runner ( )
 	{
@@ -24,7 +24,7 @@ public:
 		_rigid = obj->Add_Component < Rigidbody > ( );
 		obj->Add_Component < Box_Collider > ( )->Set_Size ( obj->Get_Size ( ) );
 
-		_text = obj->Add_Component < Text > ( )
+		_text_text = obj->Add_Component < Text > ( )
 			->Set ( "Aovel", "" )
 			->Set ( "", Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
 			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} );
@@ -48,7 +48,7 @@ public:
 		if ( new_time != displaid_time )
 		{
 			displaid_time = new_time;
-			_time->Set ( displaid_time );
+			_text_text->Set ( displaid_time );
 		}
 
 		// animation
@@ -73,7 +73,8 @@ public:
 	void SetAttackDirection ( vec3 attack_direction )
 	{
 		_attack_point = normalize ( attack_direction );
-		angle ( _attack_point );
+
+		obj->Set_2D_Rot ( angle ( _attack_point ) );
 	}
 
 	void Swing ( );
