@@ -14,7 +14,7 @@ int load ( )
 	result += Manager::Make < Texture > ( "logo", "Logo.png" );
 	result += Manager::Make < Texture > ( "noise", "noise.png", 1 );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
-
+	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders
 	result += Manager::Make < Shader > ( "crt_effect", "Shaders/crt_effect.vs", "Shaders/crt_effect.fs" );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD SHADERS" ); }
@@ -39,6 +39,8 @@ int main ( )
 	// ReKat::phisiks::Start ( 60 );
 
 	load ( );
+
+	DEBUG ( 3, "Resources Loaded" );
 
 	Manager::Objekt_Load ( "Main menu", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
 
