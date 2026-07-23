@@ -1,4 +1,5 @@
 #include <engine.hpp>
+#include "Runner_Manager.cpp"
 
 class Scenario : public Behaviour
 {
@@ -18,5 +19,6 @@ public:
 		Manager::Objekt_Load ( "Runners" );
 		Manager::Objekt_Load ( "Donators" );
 		Manager::Objekt_Load ( "UI" )->Add_Component ( "Chat" );
+		
 	}
 };
