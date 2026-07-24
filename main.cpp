@@ -17,12 +17,14 @@ int load ( )
 	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders
 	result += Manager::Make < Shader > ( "crt_effect", "Shaders/crt_effect.vs", "Shaders/crt_effect.fs" );
+	result += Manager::Make < Shader > ( "crt_effect_nes", "Shaders/crt_effect.vs", "Shaders/crt_effect_nes.fs" );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD SHADERS" ); }
 
 	// fonts
 	result += Manager::Make < Font > ( "Aovel", "AovelSansRounded.ttf", 90 );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD FONT" ); }
 
+	Manager::Register("Aovel" , Manager::Get< Font > ("Aovel")->Get_Texture());
 	return result;
 }
 
@@ -43,20 +45,23 @@ int main ( )
 
 	DEBUG ( 3, "Resources Loaded" );
 
-	Manager::Objekt_Load ( "Main menu", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Scenario" );
+	Manager::Objekt_Load ( "Main menu", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
+	//Manager::Objekt_Load ( "Main menu", vec3{0,0,0}, vec3{550,500,10} )->Add_Component <Sprite> ( )
+	//-> Set ( "Aovel" ).Set(true);
+	
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
-		.Set ( "crt_effect", "", true )
+		.Set ( "crt_effect_nes", "", true )
 		.Set ( Manager::Objekt_Get ( "Main menu" ) );
 
 	// Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Sprite > ( )->Set ( "logo", "crt_effect" ).Set ( true );
 
 	Manager::Set_Active_Scene ( "FrameBuffer" );
 
-	Manager::Get < Shader > ( "crt_effect" )->setInt ( "screenTexture", 0 );
-	Manager::Get < Shader > ( "crt_effect" )->setInt ( "noiseTexture", 1 );
-	Manager::Get < Shader > ( "crt_effect" )->setFloat ( "time", 0 );
+	Manager::Get < Shader > ( "crt_effect_nes" )->setInt ( "screenTexture", 0 );
+	Manager::Get < Shader > ( "crt_effect_nes" )->setInt ( "noiseTexture", 1 );
+	Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", 0 );
 
 	while ( ReKat::Graphik::Is_End ( ) )
 	{
@@ -64,8 +69,9 @@ int main ( )
 		Manager::Update ( );
 
 		Manager::Get < Texture > ( "noise" )->Use ( );
-		Manager::Get < Shader > ( "crt_effect" )->setFloat ( "time", Timer::Get_Time ( ) );
-		ReKat::phisiks::Update ( );
+		Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", Timer::Get_Time ( ) );
+		// ReKat::phisiks::Update ( );
+		Timer::Update ( );
 		ReKat::Graphik::Update ( );
 	}
 
