@@ -14,7 +14,7 @@ private:
 	vec3 _target_direction = {0,0,0};
 	vec3 _attack_point = {0,0,0};
 
-	bool _head_locked_by_setting_attack_direction = false;
+	int _head_locked_by_setting_attack_direction = 0;
 public:
 	Runner ( )
 	{
@@ -54,9 +54,10 @@ public:
 		}
 
 		// animation
-		_head_locked_by_setting_attack_direction = false; // for unlocking legs
+		if ( _head_locked_by_setting_attack_direction > 0 )
+		{ _head_locked_by_setting_attack_direction --; } // for unlocking legs
 	}
-
+	
 	void Stay ( )
 	{
 		DEBUG ( 5, "Staing" );
@@ -108,15 +109,18 @@ public:
 			_attack_point = normalize ( attack_direction );
 		}
 
-		_head_locked_by_setting_attack_direction = true;
+		_head_locked_by_setting_attack_direction = 2;
 
 		obj->Set_2D_Rot ( angle ( _attack_point ) ); // this is for head
 	}
 
-	void Swing ( );
-	void Throw ( );
+	void Swing ( )
+	{ DEBUG ( 3, "Swing" ); }
+	void Throw ( )
+	{ DEBUG ( 3, "Throw" ); }
 
-	void PickWeapon ( );
+	void PickWeapon ( )
+	{ DEBUG ( 3, "PickWeapon" ); }
 
 	void Reward ( int value )
 	{
