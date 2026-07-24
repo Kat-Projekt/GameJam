@@ -60,14 +60,39 @@ int main ( )
 
 	// Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Sprite > ( )->Set ( "logo", "crt_effect" ).Set ( true );
 
-	Manager::Set_Active_Scene ( "FrameBuffer" );
+
+	
+
+auto Pino = Manager::Objekt_Load("Pino", {-300,0,0});
+
+Pino->Add_Component<Rigidbody>();
+
+auto collider = Pino->Add_Component<Box_Collider>();
+collider->Set_Size({100,100,0});
+
+Pino->Add_Component<Sprite>()
+    ->Set("head", "", "", {1,1}, 0)
+    .Set(true);
+
+DEBUG(3, "Pino collider exists: ", collider != nullptr);
+DEBUG(3, "Pino collider active: ", collider->Get_Active());
+DEBUG(3, "Pino active: ", Pino->Get_Active());
+DEBUG(3, "Pino is static: ", collider->Is_Static());
+
+Manager::Objekt_Get("Main menu")
+    ->Add_Child("Pino");
+
+
+
+
+	Manager::Set_Active_Scene ( "FrameBuffer" );	
 
 	Manager::Get < Shader > ( "crt_effect_nes" )->setInt ( "screenTexture", 0 );
 	Manager::Get < Shader > ( "crt_effect_nes" )->setInt ( "noiseTexture", 1 );
 	Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", 0 );
 
 	Timer::Update ( );
-	
+
 	while ( ReKat::Graphik::Is_End ( ) )
 	{
 		ReKat::Graphik::Clear_Screen ( 0.0f );
