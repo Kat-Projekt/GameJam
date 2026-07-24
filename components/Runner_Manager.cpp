@@ -11,7 +11,7 @@ public:
 		Informations = { "Runner_Manager", 1.0, "The Count down / life manager" };
 	}
 
-	void Register (
+	Runner_Manager* Register (
 		std::string name,
 		int sprite_testa,
 		int sprite_gambe,
@@ -33,7 +33,12 @@ public:
 
 		_testa->Add_Child ( _gambe );
 		obj->Add_Child ( _testa );
+
+		return this;
 	}
 
-	void Register_weapon ( std::string weapon_name, int sprite_number, vec3 spawn_point );
+	Runner_Manager* Register_weapon ( std::string weapon_name, int sprite_number, vec3 spawn_point )
+	{
+		return this;
+	}
 };
