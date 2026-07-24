@@ -1,10 +1,11 @@
+#define DIAGNOSTIC
 #include <engine.hpp>
 
 class Runner : public Behaviour
 {
 private:
-	float move_speed = 1.0f;
-	float time = 30.0f;
+	float move_speed = 100.0f;
+	float time = 0.30f;
 	std::string displaid_time = "";
 
 	Text* _text_text = nullptr;
@@ -33,7 +34,7 @@ public:
 	{
 		time -= Timer::Get_Delta ( );
 
-		int value = static_cast<int>(time * 100);
+		int value = static_cast<int>(time);
 
 		std::string new_time = std::to_string(value);
 
@@ -55,26 +56,44 @@ public:
 
 	void Stay ( )
 	{
+		DEBUG ( 5, "Staing" );
 		_rigid->velocity = vec3(0);
 	}
 
 	void SetTarget ( vec3 target_position )
 	{
+		DEBUG ( 5, "Setting target: ", target_position );
 		if ( target_position == _target_position )
-		{ return; }
+		{
+			return;
+		}
 
 		_target_position = target_position;
-		vec3 _target_direction_x_speed = normalize ( obj->Get_Pos ( ) - target_position ) * move_speed;
+		auto nn = target_position;
+
+		vec3 _target_direction;
+		if ( nn == vec3(0) )
+		{ 
+			_target_direction = vec3(0);
+		} else {
+			_target_direction = normalize ( nn );
+		}
 	
 		// move logic
-		_rigid->velocity = _target_direction_x_speed;
+		_rigid->velocity = _target_direction * move_speed;
+		DEBUG ( 5, "velocity: ", _target_direction * move_speed );
 
 		// orientation
-		obj->Set_2D_Rot ( angle ( _attack_point ) );
+		obj->Set_2D_Rot ( angle ( _target_direction ) );
 	}
 	void SetAttackDirection ( vec3 attack_direction )
 	{
-		_attack_point = normalize ( attack_direction );
+		if ( attack_direction == vec3(0) )
+		{
+			_attack_point = vec3{1,0,0};
+		} else {
+			_attack_point = normalize ( attack_direction );
+		}	
 
 		obj->Get_Child ( "testa" )->Set_2D_Rot ( angle ( _attack_point ) );
 	}

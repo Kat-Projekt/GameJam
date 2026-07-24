@@ -45,7 +45,7 @@ int main ( )
 
 	DEBUG ( 3, "Resources Loaded" );
 
-	Manager::Objekt_Load ( "Main menu", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
+	Manager::Objekt_Load ( "Main menu" )->Add_Component ( "Scenario" );
 	//Manager::Objekt_Load ( "Main menu", vec3{0,0,0}, vec3{550,500,10} )->Add_Component <Sprite> ( )
 	//-> Set ( "Aovel" ).Set(true);
 	
@@ -70,9 +70,11 @@ int main ( )
 
 		Manager::Get < Texture > ( "noise" )->Use ( );
 		Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", Timer::Get_Time ( ) );
-		// ReKat::phisiks::Update ( );
+		ReKat::phisiks::Update ( );
 		Timer::Update ( );
 		ReKat::Graphik::Update ( );
+
+		Manager::Objekt_Get ( "Main menu" )->Print_Tree ( );
 	}
 
 	Manager::Free ( );
