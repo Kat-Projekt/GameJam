@@ -80,7 +80,7 @@ private:
 			if( current_state == State::ChasingEnemy )
 			{
 				current_state = State::Idle;
-            	state_timer = Get_Random_Pause();
+				state_timer = Get_Random_Pause();
 			}
 			return;
 		}
@@ -165,8 +165,7 @@ private:
 
 	void Update_MovingRandom( float dt) 
 	{
-		glm::vec3 target_pos = obj->Get_Pos() + wander_dir * 100.0f;
-    	runner->SetTarget(target_pos);
+    		runner->SetDirection(wander_dir);
 
 		state_timer -= dt;
 		if (state_timer <= 0.0f)

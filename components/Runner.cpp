@@ -12,7 +12,7 @@ class Runner : public Behaviour
 {
 private:
 	float move_speed = 400.0f;
-	float time = 30.0f;
+	float _time = 30.0f;
 	std::string displaid_time = "";
 
 	Text* _text_text = nullptr;
@@ -45,9 +45,14 @@ public:
 
 	void Update ( ) override
 	{
-		time -= Timer::Get_Delta ( );
+		_time -= Timer::Get_Delta ( );
 
-		int value = static_cast<int>(time*100);
+		if ( _time <= 0.0f )
+		{
+			Killed ( obj );
+		}
+
+		int value = static_cast<int>(_time*100);
 
 		std::string new_time = std::to_string(value);
 
@@ -73,7 +78,6 @@ public:
 	{
 		_rigid->velocity = vec3(0);
 	}
-
 	void SetDirection ( vec3 target_direction )
 	{
 		if ( target_direction == vec3(0) )
@@ -93,7 +97,6 @@ public:
 
 		obj->Get_Child ( "gambe" )->Set_2D_Rot ( angle ( _target_direction ) ); // this is for legs
 	}
-
 	void SetTarget ( vec3 target_position )
 	{
 		auto nn = target_position - obj->Get_Pos ( );
@@ -163,21 +166,31 @@ public:
 			_candidate_for_pick_up = nullptr;
 		}
 	}
-
-	void Reward ( int value )
+	void Reward ( float value )
 	{
-
+		DEBUG ( 5, "Player: ", obj->Get_Name ( ), " Prize: ", value );
+		_time += value;
+	}
+	void Killed ( Objekt* )
+	{
+		obj->Get_Component < Runner > ( )->Reward ( _time / 3.0f );
+		obj->Set_Active ( false );
 	}
 
-	void Collision_Trigger_Enter ( Objekt* obj ) override
+	void Collision_Trigger_Enter ( Objekt* _obj ) override
 	{
-		if ( obj->Has_Component <Weapon> ( ) )
+		Weapon * _weapon_componet = _obj->Get_Component < Weapon > ( );
+		if ( _weapon_componet )
 		{
-			_candidate_for_pick_up = obj;
-			DEBUG ( 4, "Candidate Enter: ", _candidate_for_pick_up->Get_Name ( ) );
+			if ( _weapon_componet->IsPickable ( ) )
+			{
+				_candidate_for_pick_up = _obj;
+				DEBUG ( 4, "Candidate Enter: ", _candidate_for_pick_up->Get_Name ( ) );
+			} else {
+				Killed ( _obj->Get_Father ( ).get ( ) );
+			}
 		}
 	}
-
 	void Collision_Trigger_Exit ( Objekt* obj ) override
 	{
 		if (

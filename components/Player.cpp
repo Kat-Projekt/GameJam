@@ -46,12 +46,4 @@ public:
 			_puppet->SetAttackDirection ( vec3{dlook,0.0f} );
 		}
 	}
-
-	void Collision_Trigger ( Objekt * _obj )
-	{
-		if ( _obj->Has_Component < Weapon > ( ) )
-		{
-			// this is a weapon you can get it
-		}
-	}
 };
