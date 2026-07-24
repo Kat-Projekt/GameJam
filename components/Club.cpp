@@ -1,7 +1,7 @@
 #include <engine.hpp>
 #include "Weapon.cpp"
 
-class Club : public Behaviour
+class Club : public Weapon
 {
 private:
 	/* data */

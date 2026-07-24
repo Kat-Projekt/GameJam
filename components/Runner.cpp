@@ -71,7 +71,6 @@ public:
 	
 	void Stay ( )
 	{
-		DEBUG ( 5, "Staing" );
 		_rigid->velocity = vec3(0);
 	}
 
@@ -97,8 +96,6 @@ public:
 
 	void SetTarget ( vec3 target_position )
 	{
-		DEBUG ( 5, "Setting target: ", target_position );
-
 		auto nn = target_position - obj->Get_Pos ( );
 
 		if ( nn == vec3(0) )
@@ -175,6 +172,7 @@ public:
 		if ( obj->Has_Component <Weapon> ( ) )
 		{
 			_candidate_for_pick_up = obj;
+			DEBUG ( 4, "Candidate Enter: ", _candidate_for_pick_up->Get_Name ( ) );
 		}
 	}
 
@@ -185,6 +183,7 @@ public:
 			_candidate_for_pick_up == obj
 		) {
 			_candidate_for_pick_up = nullptr;
+			DEBUG ( 4, "Candidate Exit: ", _candidate_for_pick_up->Get_Name ( ) );
 		}
 	}
 };
