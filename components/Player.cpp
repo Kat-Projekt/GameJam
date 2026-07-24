@@ -21,10 +21,26 @@ public:
 	void Update ( )
 	{
 		glm::vec2 dpos = {0,0};
+		glm::vec2 dlook = {0,0};
+		bool _throw = 0;
+		bool _attack = 0;
+		bool _pick = 0;
+
 		if ( ReKat::Graphik::Key_Pressed( "A" ) ) { dpos += glm::vec2{-1,0}; }
 		if ( ReKat::Graphik::Key_Pressed( "W" ) ) { dpos += glm::vec2{0,1};  }
 		if ( ReKat::Graphik::Key_Pressed( "D" ) ) { dpos += glm::vec2{1,0};  }
 		if ( ReKat::Graphik::Key_Pressed( "S" ) ) { dpos += glm::vec2{0,-1}; }
+
+		if ( ReKat::Graphik::Key_Pressed( "Left" ) ) { dlook += glm::vec2{-1,0}; }
+		if ( ReKat::Graphik::Key_Pressed( "Up" ) ) { dlook += glm::vec2{0,1};  }
+		if ( ReKat::Graphik::Key_Pressed( "Right" ) ) { dlook += glm::vec2{1,0};  }
+		if ( ReKat::Graphik::Key_Pressed( "Down" ) ) { dlook += glm::vec2{0,-1}; }
+		
+		if ( ReKat::Graphik::Key_Pressed( "E" ) ) { _pick = true; }
+		if ( ReKat::Graphik::Key_Pressed( "Q" ) ) { _throw = true; }
+		if ( ReKat::Graphik::Key_Pressed( "Shift" ) ) { _throw = true; }
+		if ( ReKat::Graphik::Key_Pressed( "Space" ) ) { _attack = true; }
+
 
 		if ( dpos == vec2{0,0} )
 		{ _puppet->Stay ( ); }
