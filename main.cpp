@@ -67,6 +67,7 @@ int main ( )
 	Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", 0 );
 
 	Timer::Update ( );
+	
 	while ( ReKat::Graphik::Is_End ( ) )
 	{
 		ReKat::Graphik::Clear_Screen ( 0.0f );
