@@ -29,7 +29,7 @@ public:
 		if ( dpos == vec2{0,0} )
 		{ _puppet->Stay ( ); }
 		else
-		{ _puppet->SetTarget ( obj->Get_Pos ( ) + vec3(dpos,0.0f) * 100.0f ); }
+		{ _puppet->SetDirection ( vec3{dpos,0.0f} ); }
 	}
 
 	void Collision_Trigger ( Objekt * _obj )

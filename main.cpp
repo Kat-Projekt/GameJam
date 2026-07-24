@@ -13,6 +13,7 @@ int load ( )
 	// textures
 	result += Manager::Make < Texture > ( "logo", "Logo.png" );
 	result += Manager::Make < Texture > ( "noise", "noise.png", 1 );
+	result += Manager::Make < Texture > ( "coco", "coconut.jpg" );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
 	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders
@@ -63,6 +64,7 @@ int main ( )
 	Manager::Get < Shader > ( "crt_effect_nes" )->setInt ( "noiseTexture", 1 );
 	Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", 0 );
 
+	Timer::Update ( );
 	while ( ReKat::Graphik::Is_End ( ) )
 	{
 		ReKat::Graphik::Clear_Screen ( 0.0f );
@@ -71,9 +73,7 @@ int main ( )
 		Manager::Get < Texture > ( "noise" )->Use ( );
 		Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", Timer::Get_Time ( ) );
 		ReKat::phisiks::Update ( );
-		Timer::Update ( );
 		ReKat::Graphik::Update ( );
-
 		Manager::Objekt_Get ( "Main menu" )->Print_Tree ( );
 	}
 

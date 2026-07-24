@@ -17,7 +17,7 @@ public:
 		Manager::Objekt_Load ( "Background" );
 		Manager::Objekt_Load ( "Runners" )
 			->Add_Component < Runner_Manager > ( )
-			->Register ( "player", 0, "logo", vec3{0,0,0}, "Player" );
+			->Register ( "player", 0, 0, vec3{0,0,0}, "Player" );
 		Manager::Objekt_Load ( "Donators" );
 		Manager::Objekt_Load ( "UI", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
 
