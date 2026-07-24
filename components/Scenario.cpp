@@ -20,7 +20,6 @@ public:
 			->Register ( "player", 0, "logo", vec3{0,0,0}, "Player" );
 		Manager::Objekt_Load ( "Donators" );
 		Manager::Objekt_Load ( "UI" )->Add_Component ( "Chat" );
-<<<<<<< HEAD
 
 		Manager::Objekt_Load ( "Ambient" )
 			->Add_Child ( "Background")
@@ -29,8 +28,6 @@ public:
 			.Add_Child ( "Runners" );
 
 		obj->Add_Child ( "Ambient" );
-=======
 		
->>>>>>> 7b4f050bac855b2695458dc2384cc97449f58bd1
 	}
 };
