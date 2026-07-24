@@ -1,6 +1,5 @@
 #define DIAGNOSTIC 
 #include <engine.hpp>
-#include "Weapon.cpp"
 #include "Runner.cpp"
 
 class Player : public Behaviour

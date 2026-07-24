@@ -1,5 +1,12 @@
 #define DIAGNOSTIC
+
 #include <engine.hpp>
+#include "Weapon.cpp"
+
+class Hands : public Weapon
+{
+
+};
 
 class Runner : public Behaviour
 {
@@ -10,6 +17,10 @@ private:
 
 	Text* _text_text = nullptr;
 	Rigidbody* _rigid = nullptr;
+
+	Weapon* _weapon = nullptr;
+	Objekt* _candidate_for_pick_up = nullptr;
+	Weapon _hands;
 
 	vec3 _target_direction = {0,0,0};
 	vec3 _attack_point = {0,0,0};
@@ -115,15 +126,65 @@ public:
 	}
 
 	void Swing ( )
-	{ DEBUG ( 3, "Swing" ); }
+	{
+		DEBUG ( 3, "Swing" );
+		if ( _weapon )
+		{ _weapon->Swing ( ); }
+		else
+		{ _hands.Swing( ); }
+	}
 	void Throw ( )
-	{ DEBUG ( 3, "Throw" ); }
+	{
+		DEBUG ( 3, "Throw" );
+		if ( _weapon )
+		{
+			if ( _weapon->Throw ( ) )
+			{
+				// detach weapon ( attach it to Weapons )
+				Manager::Objekt_Get ( "Weapons" )
+					->Add_Child ( _weapon->obj->Get_Name ( ) );
+				_weapon = nullptr;
+			}
+		}
+		else
+		{ _hands.Throw( ); }
+	}
 
 	void PickWeapon ( )
-	{ DEBUG ( 3, "PickWeapon" ); }
+	{
+		if ( _weapon != nullptr )
+		{ return; }
+		
+		DEBUG ( 3, "PickWeapon" );
+		if ( 
+			_candidate_for_pick_up != nullptr &&
+			_candidate_for_pick_up->Get_Component < Weapon > ( )->IsPickable ( )
+		) {
+			obj->Add_Child ( _candidate_for_pick_up->Get_Name ( ) );
+			_weapon = _candidate_for_pick_up->Get_Component < Weapon > ( );
+		}
+	}
 
 	void Reward ( int value )
 	{
 
+	}
+
+	void Collision_Trigger_Enter ( Objekt* obj ) override
+	{
+		if ( obj->Has_Component <Weapon> ( ) )
+		{
+			_candidate_for_pick_up = obj;
+		}
+	}
+
+	void Collision_Trigger_Exit ( Objekt* obj ) override
+	{
+		if (
+			obj->Has_Component <Weapon> ( ) &&
+			_candidate_for_pick_up == obj
+		) {
+			_candidate_for_pick_up = nullptr;
+		}
 	}
 };
