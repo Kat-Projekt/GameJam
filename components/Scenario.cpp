@@ -19,6 +19,7 @@ public:
 		Manager::Objekt_Load ( "Runners" )
 			->Add_Component < Runner_Manager > ( )
 			->Register ( "player", 0, 0, vec3{0,0,0}, "Player" )
+			->Register ( "AI", 0, 0, vec3{300,300,0}, "Enemy" )
 			->Register_weapon ( "club", 1, {0,-200,0}, {50,50,50}, "Club" );
 
 		Manager::Objekt_Load ( "Donators" );
