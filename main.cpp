@@ -36,13 +36,13 @@ int main ( )
 {
 	ReKat::Graphik::Start ( "Font Test", 800, 600, false, false, true );
 	ReKat::Graphik::_current_window->input._FreamBufferResize = __FreamBufferResize;
-	// ReKat::phisiks::Start ( 60 );
+	ReKat::phisiks::Start ( 60 );
 
 	load ( );
 
 	DEBUG ( 3, "Resources Loaded" );
 
-	Manager::Objekt_Load ( "Main menu", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
+	Manager::Objekt_Load ( "Main menu", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Scenario" );
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
@@ -64,8 +64,7 @@ int main ( )
 
 		Manager::Get < Texture > ( "noise" )->Use ( );
 		Manager::Get < Shader > ( "crt_effect" )->setFloat ( "time", Timer::Get_Time ( ) );
-		// ReKat::phisiks::Update ( );
-		Timer::Update ( );
+		ReKat::phisiks::Update ( );
 		ReKat::Graphik::Update ( );
 	}
 

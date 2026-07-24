@@ -22,12 +22,14 @@ public:
 		auto _testa = std::make_shared < Objekt > ( "testa" );
 
 		_gambe->Add_Component < Sprite > ( )
-			->Set ( sprite_gambe, "", "", {4,1} ); // 4 animation frames
+			->Set ( sprite_gambe, "", "", {4,1} )
+			.Set ( true ); // 4 animation frames
 		_gambe->Add_Component ( "Runner" );
 		_gambe->Add_Component ( controller );
 
 		_testa->Add_Component < Sprite > ( )
-			->Set ( sprite_gambe, "", "", {4,1} ); // 4 animation frames
+			->Set ( sprite_gambe, "", "", {4,1}, sprite_testa )
+			.Set ( true ); // only the head
 
 		_gambe->Add_Child ( _testa );
 		obj->Add_Child ( _gambe );
