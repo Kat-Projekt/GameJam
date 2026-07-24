@@ -1,5 +1,6 @@
 #include <engine.hpp>
 #include "Runner_Manager.cpp"
+#include "Club.cpp"
 
 class Scenario : public Behaviour
 {
@@ -20,7 +21,7 @@ public:
 			->Add_Component < Runner_Manager > ( )
 			->Register ( "player", 0, 0, vec3{0,0,0}, "Player" )
 			->Register ( "AI", 0, 0, vec3{300,300,0}, "Enemy" )
-			->Register_weapon ( "club", 1, {0,-200,0}, {50,50,50}, "Club" );
+			->Register_weapon < Club > ( "club", 1, {0,-200,0}, {50,50,50} );
 
 		Manager::Objekt_Load ( "Donators" );
 		Manager::Objekt_Load ( "UI", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );

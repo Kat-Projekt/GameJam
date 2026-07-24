@@ -35,10 +35,10 @@ public:
 		if ( ReKat::Graphik::Key_Pressed( "Right" ) ) { dlook += glm::vec2{1,0};  }
 		if ( ReKat::Graphik::Key_Pressed( "Down" ) ) { dlook += glm::vec2{0,-1}; }
 		
-		if ( ReKat::Graphik::Key_Pressed( "E" ) ) { _puppet->PickWeapon ( ); }
-		if ( ReKat::Graphik::Key_Pressed( "Q" ) ) { _puppet->Throw ( ); }
-		if ( ReKat::Graphik::Key_Pressed( "Shift" ) ) { _puppet->Throw ( ); }
-		if ( ReKat::Graphik::Key_Pressed( "Space" ) ) { _puppet->Swing ( ); }
+		if ( ReKat::Graphik::Key_Down( "E" ) ) { _puppet->PickWeapon ( ); }
+		if ( ReKat::Graphik::Key_Down( "Q" ) ) { _puppet->Throw ( ); }
+		if ( ReKat::Graphik::Key_Down( "Shift" ) ) { _puppet->Throw ( ); }
+		if ( ReKat::Graphik::Key_Down( "Space" ) ) { _puppet->Swing ( ); }
 
 		_puppet->SetDirection ( vec3{dpos,0.0f} );
 		if ( dlook != vec2(0) )

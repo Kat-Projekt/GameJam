@@ -60,30 +60,22 @@ int main ( )
 
 	// Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Sprite > ( )->Set ( "logo", "crt_effect" ).Set ( true );
 
+	auto Pino = Manager::Objekt_Load("Pino", {-300,0,0});
 
-	
+	auto collider = Pino->Add_Component < Box_Collider > ( );
+	collider->Set_Size({100,100,0});
 
-auto Pino = Manager::Objekt_Load("Pino", {-300,0,0});
+	Pino->Add_Component<Sprite>()
+	->Set("head", "", "", {1,1}, 0)
+	.Set(true);
 
-Pino->Add_Component<Rigidbody>();
+	DEBUG(3, "Pino collider exists: ", collider != nullptr);
+	DEBUG(3, "Pino collider active: ", collider->Get_Active());
+	DEBUG(3, "Pino active: ", Pino->Get_Active());
+	DEBUG(3, "Pino is static: ", collider->Is_Static());
 
-auto collider = Pino->Add_Component<Box_Collider>();
-collider->Set_Size({100,100,0});
-
-Pino->Add_Component<Sprite>()
-    ->Set("head", "", "", {1,1}, 0)
-    .Set(true);
-
-DEBUG(3, "Pino collider exists: ", collider != nullptr);
-DEBUG(3, "Pino collider active: ", collider->Get_Active());
-DEBUG(3, "Pino active: ", Pino->Get_Active());
-DEBUG(3, "Pino is static: ", collider->Is_Static());
-
-Manager::Objekt_Get("Main menu")
-    ->Add_Child("Pino");
-
-
-
+	Manager::Objekt_Get("Main menu")
+	->Add_Child("Pino");
 
 	Manager::Set_Active_Scene ( "FrameBuffer" );	
 
@@ -102,7 +94,7 @@ Manager::Objekt_Get("Main menu")
 		Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", Timer::Get_Time ( ) );
 		ReKat::phisiks::Update ( );
 		ReKat::Graphik::Update ( );
-		Manager::Objekt_Get ( "Main menu" )->Print_Tree ( );
+		// Manager::Objekt_Get ( "Main menu" )->Print_Tree ( );
 	}
 
 	Manager::Free ( );

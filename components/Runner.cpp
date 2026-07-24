@@ -157,8 +157,10 @@ public:
 			_candidate_for_pick_up != nullptr &&
 			_candidate_for_pick_up->Get_Component < Weapon > ( )->IsPickable ( )
 		) {
+			DEBUG ( 3, "Picked Weapon: ",  _candidate_for_pick_up->Get_Name ( ) );
 			obj->Add_Child ( _candidate_for_pick_up->Get_Name ( ) );
-			_weapon = _candidate_for_pick_up->Get_Component < Weapon > ( );
+			_weapon = _candidate_for_pick_up->Get_Component < Weapon > ( )->Pick ( );
+			_candidate_for_pick_up = nullptr;
 		}
 	}
 
@@ -182,8 +184,8 @@ public:
 			obj->Has_Component <Weapon> ( ) &&
 			_candidate_for_pick_up == obj
 		) {
-			_candidate_for_pick_up = nullptr;
 			DEBUG ( 4, "Candidate Exit: ", _candidate_for_pick_up->Get_Name ( ) );
+			_candidate_for_pick_up = nullptr;
 		}
 	}
 };

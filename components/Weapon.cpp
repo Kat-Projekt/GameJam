@@ -1,3 +1,4 @@
+#define DIAGNOSTIC
 #include <engine.hpp>
 
 class Weapon : public Behaviour
@@ -13,7 +14,17 @@ public:
 	// if another runner has it, it cannot be picked up
 	bool IsPickable ( )
 	{
-		return obj->Get_Father ( )->Has_Component ( "Runner" );
+		DEBUG ( 5, "father? ", obj->Get_Father ( )->Has_Component ( "Runner" ) );
+		return !obj->Get_Father ( )->Has_Component ( "Runner" );
+	}
+
+	Weapon* Pick ( )
+	{
+		obj->Set_Pos ( {0,0,0} );
+		obj->Set_Rot_Pivot ( {1,0,0} );
+		obj->Set_2D_Rot ( M_PI/3 );
+
+		return this;
 	}
 
 	virtual void Swing ( ) { }

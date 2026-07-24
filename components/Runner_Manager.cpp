@@ -38,13 +38,13 @@ public:
 		return this;
 	}
 
+	template < class Weap > 
 	Runner_Manager* Register_weapon (
 		std::string weapon_name,
 		int sprite_number,
 		vec3 spawn_point,
-		vec3 collider_size,
-		std::string component_name )
-	{
+		vec3 collider_size
+	) {
 		auto _weapon = Manager::Objekt_Load ( weapon_name, spawn_point );
 
 		_weapon->Add_Component < Box_Collider > ( )
@@ -55,7 +55,7 @@ public:
 			->Set ( "weapons", "", "", {2,2}, sprite_number )
 			.Set ( true );
 
-		_weapon->Add_Component ( component_name );
+		_weapon->Add_Component < Weap > ( );
 
 		Manager::Objekt_Get ( "Weapons" )->Add_Child ( _weapon );
 
