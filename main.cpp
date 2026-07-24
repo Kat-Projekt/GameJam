@@ -14,6 +14,8 @@ int load ( )
 	result += Manager::Make < Texture > ( "logo", "Logo.png" );
 	result += Manager::Make < Texture > ( "noise", "noise.png", 1 );
 	result += Manager::Make < Texture > ( "coco", "coconut.jpg" );
+	result += Manager::Make < Texture > ( "legs", "Logo.png" ); // legs sprite sheet
+	result += Manager::Make < Texture > ( "head", "coconut.jpg" ); // heads sprite sheet
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
 	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders

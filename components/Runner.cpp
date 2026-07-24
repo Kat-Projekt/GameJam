@@ -4,7 +4,7 @@
 class Runner : public Behaviour
 {
 private:
-	float move_speed = 100.0f;
+	float move_speed = 400.0f;
 	float time = 30.0f;
 	std::string displaid_time = "";
 
@@ -13,6 +13,8 @@ private:
 
 	vec3 _target_direction = {0,0,0};
 	vec3 _attack_point = {0,0,0};
+
+	bool _head_locked_by_setting_attack_direction = false;
 public:
 	Runner ( )
 	{
@@ -52,6 +54,7 @@ public:
 		}
 
 		// animation
+		_head_locked_by_setting_attack_direction = false; // for unlocking legs
 	}
 
 	void Stay ( )
@@ -72,7 +75,12 @@ public:
 		_rigid->velocity = target_direction * move_speed;
 
 		// orientation
-		obj->Set_2D_Rot ( angle ( _target_direction ) );
+		if ( !_head_locked_by_setting_attack_direction )
+		{
+			obj->Set_2D_Rot ( angle ( _target_direction ) ); // this is for head
+		}
+
+		obj->Get_Child ( "gambe" )->Set_2D_Rot ( angle ( _target_direction ) ); // this is for legs
 	}
 
 	void SetTarget ( vec3 target_position )
@@ -84,27 +92,25 @@ public:
 		if ( nn == vec3(0) )
 		{ 
 			_target_direction = vec3(0);
+			Stay ( );
 		} else {
-			_target_direction = normalize ( nn );
+			// _target_direction = normalize ( nn );
+			SetDirection ( nn );
 		}
-	
-		// move logic
-		_rigid->velocity = _target_direction * move_speed;
-		DEBUG ( 5, "velocity: ", _target_direction * move_speed );
-
-		// orientation
-		obj->Set_2D_Rot ( angle ( _target_direction ) );
 	}
 	void SetAttackDirection ( vec3 attack_direction )
 	{
 		if ( attack_direction == vec3(0) )
 		{
 			_attack_point = vec3{1,0,0};
+			return;
 		} else {
 			_attack_point = normalize ( attack_direction );
-		}	
+		}
 
-		obj->Get_Child ( "testa" )->Set_2D_Rot ( angle ( _attack_point ) );
+		_head_locked_by_setting_attack_direction = true;
+
+		obj->Set_2D_Rot ( angle ( _attack_point ) ); // this is for head
 	}
 
 	void Swing ( );
