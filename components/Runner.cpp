@@ -5,13 +5,13 @@ class Runner : public Behaviour
 {
 private:
 	float move_speed = 100.0f;
-	float time = 0.30f;
+	float time = 30.0f;
 	std::string displaid_time = "";
 
 	Text* _text_text = nullptr;
 	Rigidbody* _rigid = nullptr;
 
-	vec3 _target_position = {0,0,0};
+	vec3 _target_direction = {0,0,0};
 	vec3 _attack_point = {0,0,0};
 public:
 	Runner ( )
@@ -34,7 +34,7 @@ public:
 	{
 		time -= Timer::Get_Delta ( );
 
-		int value = static_cast<int>(time);
+		int value = static_cast<int>(time*100);
 
 		std::string new_time = std::to_string(value);
 
@@ -60,18 +60,27 @@ public:
 		_rigid->velocity = vec3(0);
 	}
 
+	void SetDirection ( vec3 target_direction )
+	{
+		if ( target_direction == vec3(0) )
+		{
+			Stay( );
+			return;
+		}
+		
+		_target_direction = normalize ( target_direction );
+		_rigid->velocity = target_direction * move_speed;
+
+		// orientation
+		obj->Set_2D_Rot ( angle ( _target_direction ) );
+	}
+
 	void SetTarget ( vec3 target_position )
 	{
 		DEBUG ( 5, "Setting target: ", target_position );
-		if ( target_position == _target_position )
-		{
-			return;
-		}
 
-		_target_position = target_position;
-		auto nn = target_position;
+		auto nn = target_position - obj->Get_Pos ( );
 
-		vec3 _target_direction;
 		if ( nn == vec3(0) )
 		{ 
 			_target_direction = vec3(0);

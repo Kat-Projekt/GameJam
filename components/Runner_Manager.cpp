@@ -14,7 +14,7 @@ public:
 	void Register (
 		std::string name,
 		int sprite_testa,
-		std::string sprite_gambe,
+		int sprite_gambe,
 		vec3 spawn_point,
 		std::string controller
 	) {
@@ -22,13 +22,13 @@ public:
 		auto _testa = std::make_shared < Objekt > ( "testa" );
 
 		_gambe->Add_Component < Sprite > ( )
-			->Set ( sprite_gambe, "", "", {4,1} )
+			->Set ( "logo", "", "", {4,1}, sprite_gambe )
 			.Set ( true ); // 4 animation frames
 		_gambe->Add_Component ( "Runner" );
 		_gambe->Add_Component ( controller );
 
 		_testa->Add_Component < Sprite > ( )
-			->Set ( sprite_gambe, "", "", {4,1}, sprite_testa )
+			->Set ( "coco", "", "", {2,2}, sprite_testa )
 			.Set ( true ); // only the head
 
 		_gambe->Add_Child ( _testa );
