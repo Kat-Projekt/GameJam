@@ -11,6 +11,8 @@ public:
 	};
 
 private:
+	//pointer to runner
+	Runner* runner = nullptr;
 	/* data */
 	float detection_radius = 200.0f;  // Raggio rilevamento nemici
 	float stopping_distance = 1.0f;   // distanza minima dal target
@@ -150,6 +152,8 @@ private:
 
 	void Update_Idle ( float dt) 
 	{
+		runner->Stay();
+
 		state_timer -= dt;
 		if (state_timer <= 0.0f)
 		{
@@ -161,8 +165,8 @@ private:
 
 	void Update_MovingRandom( float dt) 
 	{
-		glm::vec3 displacement = wander_dir * move_speed * dt;
-    		obj->Inc_Pos(displacement);
+		glm::vec3 target_pos = obj->Get_Pos() + wander_dir * 100.0f;
+    	runner->SetTarget(target_pos);
 
 		state_timer -= dt;
 		if (state_timer <= 0.0f)
@@ -171,29 +175,10 @@ private:
 			current_state = State::Idle;
 		}
 	}
-	void Update_ChasingEnemy(float dt)
+	void Update_ChasingEnemy()
 	{
-		if (!enemy_target) return;
-
-		glm::vec3 my_pos = obj->Get_Pos();
-		glm::vec3 target_pos = enemy_target->Get_Pos();
-
-		glm::vec3 chase_dir = target_pos - my_pos;
-		float dist = glm::length(chase_dir);
-
-		float distance_to_cover = dist - stopping_distance;
-
-		if (distance_to_cover > 0.0f)
-		{
-			chase_dir = glm::normalize(chase_dir);
-
-			
-			float desired_step = move_speed * dt;
-			float actual_step = glm::min(desired_step, distance_to_cover);
-
-			glm::vec3 displacement = chase_dir * actual_step;
-			obj->Inc_Pos(displacement);
-		}
+		if (!enemy_target || !runner) return;
+		runner->SetTarget(enemy_target->Get_Pos());
 	}
 public:
 	Enemy ( )
@@ -203,6 +188,7 @@ public:
 
 	void Start() override
 	{
+		runner = obj->Get_Component<Runner>();
 		state_timer = Get_Random_Pause();
 	}
 
@@ -229,7 +215,7 @@ public:
 			break;
 
 			case State::ChasingEnemy:
-			Update_ChasingEnemy(dt);
+			Update_ChasingEnemy();
 			break;
 		}
 	}
