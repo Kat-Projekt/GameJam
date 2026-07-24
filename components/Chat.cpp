@@ -53,11 +53,11 @@ public:
 	void Start ( )
 	{
 		_text = obj->Add_Component < Text > ( );
-		_text->Set ( "Aovel", "" )->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, true );
+		_text->Set ( "Aovel", "" )->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, false );
 
 		super_text = obj->Add_Component < Text > ( );
 		super_text->Set ( "Aovel", "" )
-			->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, true )
+			->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, false )
 			->Set ( vec4{0.5f,0.5f,0.5f,1.0f} );
 
 		names = LoadShit ( "Donors/random_chat_names.txt" );
