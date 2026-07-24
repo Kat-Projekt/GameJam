@@ -3,7 +3,7 @@
 class Runner : public Behaviour
 {
 private:
-	float move_speed = 200.0f;
+	float move_speed = 1.0f;
 	float time = 30.0f;
 	std::string displaid_time = "";
 
@@ -11,7 +11,6 @@ private:
 	Rigidbody* _rigid = nullptr;
 
 	vec3 _target_position = {0,0,0};
-
 	vec3 _attack_point = {0,0,0};
 public:
 	Runner ( )
@@ -69,12 +68,15 @@ public:
 	
 		// move logic
 		_rigid->velocity = _target_direction_x_speed;
+
+		// orientation
+		obj->Set_2D_Rot ( angle ( _attack_point ) );
 	}
 	void SetAttackDirection ( vec3 attack_direction )
 	{
 		_attack_point = normalize ( attack_direction );
 
-		obj->Set_2D_Rot ( angle ( _attack_point ) );
+		obj->Get_Child ( "testa" )->Set_2D_Rot ( angle ( _attack_point ) );
 	}
 
 	void Swing ( );

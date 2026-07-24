@@ -1,11 +1,12 @@
 #define DIAGNOSTIC 
 #include <engine.hpp>
 #include "Weapon.cpp"
+#include "Runner.cpp"
 
 class Player : public Behaviour
 {
 private:
-	float speed = 200.0f;
+	Runner* _puppet;
 public:
 	Player ( )
 	{
@@ -14,7 +15,7 @@ public:
 
 	void Start ( )
 	{
-
+		_puppet = obj->Get_Component < Runner > ( );
 	}
 
 	void Update ( )
@@ -25,13 +26,10 @@ public:
 		if ( ReKat::Graphik::Key_Pressed( "D" ) ) { dpos += glm::vec2{1,0};  }
 		if ( ReKat::Graphik::Key_Pressed( "S" ) ) { dpos += glm::vec2{0,-1}; }
 
-		if ( dpos != vec2{0,0} ) { dpos = normalize ( dpos ); }
-		vec2 new_move = dpos * speed * (float)Timer::delta_time;
+		if ( dpos == vec2{0,0} )
+		{ _puppet->Stay ( ); }
 
-		// obj->Get_Component < Rigidbody > ( )->velocity = ( vec3 ( dpos * speed, 0 ) );
-		obj->Inc_Pos ( vec3 {new_move.x,new_move.y,0} );
-
-		DEBUG ( 4, obj->Get_Pos ( ), new_move, (float)Timer::Get_Delta ( ), Timer::Get_Time ( ) );
+		_puppet->SetTarget ( vec3(dpos,0.0f) * 100.0f );
 	}
 
 	void Collision_Trigger ( Objekt * _obj )

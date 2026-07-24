@@ -38,7 +38,7 @@ int main ( )
 {
 	ReKat::Graphik::Start ( "Font Test", 800, 600, false, false, true );
 	ReKat::Graphik::_current_window->input._FreamBufferResize = __FreamBufferResize;
-	// ReKat::phisiks::Start ( 60 );
+	ReKat::phisiks::Start ( 60 );
 
 	load ( );
 
