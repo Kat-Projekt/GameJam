@@ -28,6 +28,7 @@ public:
 		_testa->Add_Component < Sprite > ( )
 			->Set ( "head", "", "", {2,2}, sprite_testa )
 			.Set ( true ); // only the head
+
 		_testa->Add_Component ( "Runner" );
 		_testa->Add_Component ( controller );
 
@@ -37,8 +38,27 @@ public:
 		return this;
 	}
 
-	Runner_Manager* Register_weapon ( std::string weapon_name, int sprite_number, vec3 spawn_point )
+	Runner_Manager* Register_weapon (
+		std::string weapon_name,
+		int sprite_number,
+		vec3 spawn_point,
+		vec3 collider_size,
+		std::string component_name )
 	{
+		auto _weapon = Manager::Objekt_Load ( weapon_name, spawn_point );
+
+		_weapon->Add_Component < Box_Collider > ( )
+			->Set_Size ( collider_size )
+			->Set_Trigger ( true );
+		
+		_weapon->Add_Component < Sprite > ( )
+			->Set ( "weapons", "", "", {2,2}, sprite_number )
+			.Set ( true );
+
+		_weapon->Add_Component ( component_name );
+
+		Manager::Objekt_Get ( "Weapons" )->Add_Child ( _weapon );
+
 		return this;
 	}
 };
