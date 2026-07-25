@@ -1,4 +1,5 @@
 #include <engine.hpp>
+#include "file_refes.h"
 
 class Runner_Manager : public Behaviour
 {
@@ -22,7 +23,7 @@ public:
 		auto _gambe = std::make_shared < Objekt > ( "gambe" );
 
 		_gambe->Add_Component < Sprite > ( )
-			->Set ( "legs", "", "", {4,1}, sprite_gambe )
+			->Set ( RUNNER_SHEET, "", "", {4,1}, sprite_gambe )
 			.Set ( true ); // 4 animation frames
 
 		_testa->Add_Component < Sprite > ( )
