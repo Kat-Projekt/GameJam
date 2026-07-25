@@ -14,21 +14,19 @@ int load ( )
 	result += Manager::Make < Texture > ( "logo", "Logo.png" );
 	result += Manager::Make < Texture > ( "noise", "noise.png", 1 );
 	result += Manager::Make < Texture > ( "coco", "coconut.jpg" );
-	result += Manager::Make < Texture > ( RUNNER_SHEET, RUNNER_SHEET_PATH ); // legs sprite sheet
-	result += Manager::Make < Texture > ( "head", "coconut.jpg" ); // heads sprite sheet
-	result += Manager::Make < Texture > ( "weapons", "coconut.jpg" ); // weapons sprite sheet
+	result += Manager::Make < Texture > ( RUNNERS_SHEET, RUNNERS_SHEET_PATH ); // runners sprite sheet
+	result += Manager::Make < Texture > ( WEAPONS_SHEET, WEAPONS_SHEET_PATH ); // weapons sprite sheet
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
 	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders
-	result += Manager::Make < Shader > ( "crt_effect", "Shaders/crt_effect.vs", "Shaders/crt_effect.fs" );
-	result += Manager::Make < Shader > ( "crt_effect_nes", "Shaders/crt_effect.vs", "Shaders/crt_effect_nes.fs" );
+	result += Manager::Make < Shader > ( NES_CRT_SHADER, NES_CRT_SHADER_VS_PATH, NES_CRT_SHADER_FS_PATH);
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD SHADERS" ); }
 
 	// fonts
-	result += Manager::Make < Font > ( "Aovel", "AovelSansRounded.ttf", 90 );
+	result += Manager::Make < Font > ( AOVEL_SANS_ROUNDED_FONT, AOVEL_SANS_ROUNDED_FONT_PATH, 90 );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD FONT" ); }
 
-	Manager::Register("Aovel" , Manager::Get< Font > ("Aovel")->Get_Texture());
+	Manager::Register(AOVEL_SANS_ROUNDED_FONT , Manager::Get< Font > (AOVEL_SANS_ROUNDED_FONT)->Get_Texture());
 	return result;
 }
 
@@ -56,7 +54,7 @@ int main ( )
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
-		.Set ( "crt_effect_nes", "", true )
+		.Set ( NES_CRT_SHADER, "", true )
 		.Set ( Manager::Objekt_Get ( "Main menu" ) );
 
 	// Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Sprite > ( )->Set ( "logo", "crt_effect" ).Set ( true );
@@ -67,7 +65,7 @@ int main ( )
 	collider->Set_Size({100,100,0});
 
 	Pino->Add_Component<Sprite>()
-	->Set("head", "", "", {1,1}, 0)
+	->Set("logo", "", "", {1,1}, 0)
 	.Set(true);
 
 	DEBUG(3, "Pino collider exists: ", collider != nullptr);
@@ -80,9 +78,9 @@ int main ( )
 
 	Manager::Set_Active_Scene ( "FrameBuffer" );	
 
-	Manager::Get < Shader > ( "crt_effect_nes" )->setInt ( "screenTexture", 0 );
-	Manager::Get < Shader > ( "crt_effect_nes" )->setInt ( "noiseTexture", 1 );
-	Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", 0 );
+	Manager::Get < Shader > ( NES_CRT_SHADER )->setInt ( "screenTexture", 0 );
+	Manager::Get < Shader > ( NES_CRT_SHADER )->setInt ( "noiseTexture", 1 );
+	Manager::Get < Shader > ( NES_CRT_SHADER )->setFloat ( "time", 0 );
 
 	Timer::Update ( );
 
@@ -92,7 +90,7 @@ int main ( )
 		Manager::Update ( );
 
 		Manager::Get < Texture > ( "noise" )->Use ( );
-		Manager::Get < Shader > ( "crt_effect_nes" )->setFloat ( "time", Timer::Get_Time ( ) );
+		Manager::Get < Shader > ( NES_CRT_SHADER )->setFloat ( "time", Timer::Get_Time ( ) );
 		ReKat::phisiks::Update ( );
 		ReKat::Graphik::Update ( );
 		// Manager::Objekt_Get ( "Main menu" )->Print_Tree ( );

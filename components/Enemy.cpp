@@ -91,7 +91,7 @@ private:
         glm::vec3 my_pos = obj->Get_Pos();
 
         //checks every runner in the scene to find the closest inside the detection radius
-        auto active_scene = Manager::Objekt_Get("Main scene");
+        auto active_scene = Manager::Objekt_Get("Main menu");
 		if (!active_scene) return;
 
 		auto runners = active_scene->Get_Component_Recursive<Runner>();
@@ -116,7 +116,7 @@ private:
 		}
 
 		//checks wether player is the closest target inside the radius
-		auto player_ptr = Manager::Objekt_Get("Player");
+		auto player_ptr = Manager::Objekt_Get("player");
         if (player_ptr)
         {
             Objekt* player = player_ptr.get();

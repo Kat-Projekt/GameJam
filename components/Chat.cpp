@@ -1,6 +1,7 @@
 #include <engine.hpp>
 #include <fstream>
 #include <random>
+#include "file_refes.h"
 
 class Chat : public Behaviour
 {
@@ -53,15 +54,15 @@ public:
 	void Start ( )
 	{
 		_text = obj->Add_Component < Text > ( );
-		_text->Set ( "Aovel", "" )->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, false );
+		_text->Set ( AOVEL_SANS_ROUNDED_FONT, "" )->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, false );
 
 		super_text = obj->Add_Component < Text > ( );
-		super_text->Set ( "Aovel", "" )
+		super_text->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
 			->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, false )
 			->Set ( vec4{0.5f,0.5f,0.5f,1.0f} );
 
-		names = LoadShit ( "Donors/random_chat_names.txt" );
-		random_messages = LoadShit ( "Donors/random_chat_messagges.txt" );
+		names = LoadShit ( CHAT_NAMES_PATH );
+		random_messages = LoadShit ( CHAT_MESSAGES_PATH );
 
 		DEBUG ( 4, names );
 		DEBUG ( 4, random_messages );

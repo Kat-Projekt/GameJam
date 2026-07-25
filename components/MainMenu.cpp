@@ -1,5 +1,6 @@
 #define DIAGNOSTIC
 #include <engine.hpp>
+#include "file_refes.h"
 
 void ContinueGame ( )
 {
@@ -24,7 +25,7 @@ public:
 		);
 		title->Add_Component < Text > ( )
 			->Set ( "Killing Time" )
-			->Set ( "Aovel", "" );
+			->Set ( AOVEL_SANS_ROUNDED_FONT, "" );
 		
 		std::shared_ptr < Objekt > continue_button = std::make_shared < Objekt > (
 			"MainMenuContinue",

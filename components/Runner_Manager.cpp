@@ -14,8 +14,8 @@ public:
 
 	Runner_Manager* Register (
 		std::string name,
-		int sprite_testa,
-		int sprite_gambe,
+		int sprite,
+		int temp,
 		vec3 spawn_point,
 		std::string controller
 	) {
@@ -23,11 +23,15 @@ public:
 		auto _gambe = std::make_shared < Objekt > ( "gambe" );
 
 		_gambe->Add_Component < Sprite > ( )
+<<<<<<< HEAD
 			->Set ( RUNNER_SHEET, "", "", {4,1}, sprite_gambe )
+=======
+			->Set ( RUNNERS_SHEET, "", "", {4,1}, sprite )
+>>>>>>> 74f9e453464425ca0c6d57ab90ae7a5486434e9f
 			.Set ( true ); // 4 animation frames
 
 		_testa->Add_Component < Sprite > ( )
-			->Set ( "head", "", "", {2,2}, sprite_testa )
+			->Set ( RUNNERS_SHEET, "", "", {2,2}, sprite )
 			.Set ( true ); // only the head
 
 		_testa->Add_Component ( "Runner" );
@@ -53,7 +57,7 @@ public:
 			->Set_Trigger ( true );
 		
 		_weapon->Add_Component < Sprite > ( )
-			->Set ( "weapons", "", "", {2,2}, sprite_number )
+			->Set ( WEAPONS_SHEET, "", "", {2,2}, sprite_number )
 			.Set ( true );
 
 		_weapon->Add_Component < Weap > ( );
