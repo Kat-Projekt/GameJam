@@ -58,14 +58,14 @@ public:
 		
 		auto _testa = std::make_shared < Objekt > ( "testa", vec3{0,0,0}, vec3{200,200,200} );
 		auto _gambe = std::make_shared < Objekt > ( "gambe", vec3{0,0,0}, vec3{200,200,200} );
-		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{0,-0.2,0} );
-		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{0,0.6,0} );
+		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{-0.25,-0.2+0.75,0} );
+		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{-0.5,0.6+1.5,0} );
 
-		_gambe->Add_Component < Sprite > ( )
+		auto _gambe_sprite = _gambe->Add_Component < Sprite > ( )
 			->Set ( RUNNERS_SHEET, "", "", {15,2}, _legs )
 			.Set ( true );
 
-		_testa->Add_Component < Sprite > ( )
+		auto _testa_sprite = _testa->Add_Component < Sprite > ( )
 			->Set ( RUNNERS_SHEET, "", "", {15,2}, _head )
 			.Set ( true );
 
@@ -83,6 +83,27 @@ public:
 		obj->Add_Child ( _gambe );
 		obj->Add_Child ( _tempo );
 		obj->Add_Child ( _numbe );
+
+		// creating animations
+		std::string n = obj->Get_Name ( );
+		Manager::Make < Animation < int > > ( "idle_legs" + n, &(_gambe_sprite._frame), PlayMode::LOOP );
+		Manager::Make < Animation < int > > ( "idle_head" + n, &(_testa_sprite._frame), PlayMode::LOOP );
+
+		Manager::Make < Animation < int > > ( "walking_legs" + n, &(_gambe_sprite._frame), PlayMode::LOOP );
+		Manager::Make < Animation < int > > ( "walking_head" + n, &(_testa_sprite._frame), PlayMode::LOOP );
+
+		Manager::Make < Animation < int > > ( "swing_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
+		Manager::Make < Animation < int > > ( "fists_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
+		Manager::Make < Animation < int > > ( "throw_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
+
+		Manager::Make < Animation < float > > ( "weapon_swing" + weapon_name, &(obj->Get_Transform ( ).Expose_2D_Rot ( )), PlayMode::ONCE );
+		auto swing = Manager::Get < Animation < float > > ( "weapon_swing" + weapon_name );
+
+		swing	->Add_Frame ( -M_PI_4, M_PI_4, 1 );
+
+		obj	->Add_Component < Animator > ( )
+				->New_Node ( "swing" )
+				->Add_Animation ( "swing", swing );
 	}
 
 	void Update ( ) override
