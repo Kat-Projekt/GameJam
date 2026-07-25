@@ -18,9 +18,9 @@ private:
 	Runner_Manager* runner_manager = nullptr;
 	/* data */
 	float detection_radius = 250.0f;  // Raggio rilevamento nemici
-	float weapon_detection_radius = 2000.0f;  // Raggio rilevamento armi
+	float weapon_detection_radius = 400.0f;  // Raggio rilevamento armi
 	float chasing_weapon_detection_radius = 100.0f;  // Raggio rilevamento armi durante inseguimento
-	float stopping_distance = 100.0f;   // distanza minima dal target
+	float stopping_distance = 125.0f;   // distanza minima dal target
 
 	// Limiti di tempo per il movimento casuale
 	const float min_move_time = 1.5f;       // Tempo minimo di camminata

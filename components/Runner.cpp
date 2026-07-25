@@ -5,6 +5,19 @@
 #include "file_refes.h"
 #include "Chat.cpp"
 
+class Runner; // forward declaration
+
+class Punch_Hitbox : public Behaviour
+{
+public:
+	Punch_Hitbox ( )
+	{
+		Informations = { "Punch_Hitbox", 1.0, "Melee hitbox for bare-handed attacks" };
+	}
+	void Collision_Trigger_Enter ( Objekt* _obj ) override;
+};
+
+
 class Hands : public Weapon
 {
 public:
@@ -92,6 +105,14 @@ public:
 			->Set ( std::to_string ( _player_number ) , Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
 			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} - _color + vec4{0,0,0,1} );
 
+		auto _pugno = std::make_shared < Objekt > ( "pugno", vec3{0,0,0}, vec3{150,150,150} );
+		auto _pugno_collider = _pugno->Add_Component < Box_Collider > ( );
+		_pugno_collider->Set_Size ( vec3{150,150,150} );
+		_pugno_collider->Set_Trigger ( true );
+		_pugno_collider->Set_Active ( false );
+		_pugno->Add_Component < Punch_Hitbox > ( );
+		obj->Add_Child ( _pugno );
+
 		obj->Add_Child ( _testa );
 		obj->Add_Child ( _gambe );
 		obj->Add_Child ( _tempo );
@@ -177,8 +198,16 @@ public:
 		}
 
 		// animation
+
 		if ( _head_locked_by_setting_attack_direction > 0 )
 		{ _head_locked_by_setting_attack_direction --; } // for unlocking legs
+
+		if ( Timer::Get_Time ( ) >= _next_attack_window )
+		{
+			auto pugno_collider = obj->Get_Child ( "pugno" )->Get_Component < Box_Collider > ( );
+			if ( pugno_collider && pugno_collider->Get_Active ( ) )
+			{ pugno_collider->Set_Active ( false ); }
+		}
 	}
 	
 	void Stay ( )
@@ -245,9 +274,14 @@ public:
 		_next_attack_window = Timer::Get_Time ( ) + _attack_cooldown;
 		DEBUG ( 3, "Swing" );
 		if ( _weapon )
-		{ _weapon->Swing ( ); }
+		{ 
+			_weapon->Swing ( ); 
+		}
 		else
-		{ _hands.Swing( ); }
+		{ 
+			_hands.Swing( );
+			obj->Get_Child ( "pugno" )->Get_Component < Box_Collider > ( )->Set_Active ( true );
+		}
 	}
 	int Throw ( )
 	{
@@ -344,4 +378,17 @@ public:
 	}
 
 	bool Has_Weapon ( ) const { return _weapon != nullptr; }
+
+	
 };
+
+void Punch_Hitbox::Collision_Trigger_Enter ( Objekt* _obj )
+	{
+		auto father = obj->Get_Father ( );
+		if ( !father ) return;
+
+		Runner* target = _obj->Get_Component < Runner > ( );
+		if ( !target ) return;
+
+		target->Killed ( father.get ( ) );
+	}
