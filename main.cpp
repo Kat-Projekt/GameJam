@@ -99,4 +99,5 @@ int main ( )
 
 	Manager::Free ( );
 	Manager::Free_Objekts ( );
+	
 }

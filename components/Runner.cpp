@@ -7,7 +7,16 @@
 
 class Hands : public Weapon
 {
-
+public:
+	void Swing ( ) override
+	{
+		DEBUG ( 3, "Punch" );
+	}
+	int Throw ( ) override
+	{
+		DEBUG ( 3, "Cannot throw fists" );
+		return 0;
+	}
 };
 
 class Runner : public Behaviour
@@ -25,7 +34,7 @@ private:
 
 	Weapon* _weapon = nullptr;
 	Objekt* _candidate_for_pick_up = nullptr;
-	Weapon _hands;
+	Hands _hands;
 
 	vec3 _target_direction = {0,0,0};
 	vec3 _attack_point = {0,0,0};
@@ -298,4 +307,6 @@ public:
 		_head = head;
 		_legs = legs;
 	}
+
+	bool Has_Weapon ( ) const { return _weapon != nullptr; }
 };

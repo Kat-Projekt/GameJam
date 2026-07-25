@@ -5,8 +5,8 @@
 class Runner_Manager : public Behaviour
 {
 private:
-	std::vector < Behaviour* > _runners;
-	std::vector < Behaviour* > _weapons;
+	std::vector < Objekt* > _runners;
+	std::vector < Objekt* > _weapons;
 public:
 	Runner_Manager ( )
 	{
@@ -26,6 +26,8 @@ public:
 		_runner->Add_Component ( controller );
 
 		obj->Add_Child ( _runner );
+
+		_runners.push_back ( _runner.get ( ) );
 
 		return this;
 	}
@@ -51,6 +53,11 @@ public:
 
 		Manager::Objekt_Get ( "Weapons" )->Add_Child ( _weapon );
 
+		_weapons.push_back ( _weapon.get ( ) );
+
 		return this;
 	}
+
+	const std::vector < Objekt* > & Get_Runners ( ) const { return _runners; }
+	const std::vector < Objekt* > & Get_Weapons ( ) const { return _weapons; }
 };
