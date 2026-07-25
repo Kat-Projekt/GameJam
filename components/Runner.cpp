@@ -58,15 +58,17 @@ public:
 		
 		auto _testa = std::make_shared < Objekt > ( "testa", vec3{0,0,0}, vec3{200,200,200} );
 		auto _gambe = std::make_shared < Objekt > ( "gambe", vec3{0,0,0}, vec3{200,200,200} );
-		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{-0.25,-0.2+0.75,0} );
-		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{-0.5,0.6+1.5,0} );
+		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{0,-0.2,0} );
+		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{0,0.6,0} );
 
 		auto _gambe_sprite = _gambe->Add_Component < Sprite > ( )
 			->Set ( RUNNERS_SHEET, "", "", {15,2}, _legs )
+			.Set ( vec4{1,0,0,1})
 			.Set ( true );
 
 		auto _testa_sprite = _testa->Add_Component < Sprite > ( )
 			->Set ( RUNNERS_SHEET, "", "", {15,2}, _head )
+			.Set ( vec4{1,0,0,1})
 			.Set ( true );
 
 		_remaining_time = _tempo->Add_Component < Text > ( )
@@ -96,16 +98,43 @@ public:
 		Manager::Make < Animation < int > > ( "fists_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
 		Manager::Make < Animation < int > > ( "throw_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
 
-		/*
-		Manager::Make < Animation < float > > ( "weapon_swing" + weapon_name, &(obj->Get_Transform ( ).Expose_2D_Rot ( )), PlayMode::ONCE );
-		auto swing = Manager::Get < Animation < float > > ( "weapon_swing" + weapon_name );
+		// getting animations
+		auto idle_legs		= Manager::Get < Animation < int > > ( "idle_legs" + n );
+		auto idle_head		= Manager::Get < Animation < int > > ( "idle_head" + n );
 
-		swing	->Add_Frame ( -M_PI_4, M_PI_4, 1 );
+		auto walking_legs	= Manager::Get < Animation < int > > ( "walking_legs" + n );
+		auto walking_head	= Manager::Get < Animation < int > > ( "walking_head" + n );
 
-		obj	->Add_Component < Animator > ( )
-				->New_Node ( "swing" )
-				->Add_Animation ( "swing", swing );
-		*/
+		auto swing_animation	= Manager::Get < Animation < int > > ( "swing_animation" + n );
+		auto fists_animation	= Manager::Get < Animation < int > > ( "fists_animation" + n );
+		auto throw_animation	= Manager::Get < Animation < int > > ( "throw_animation" + n );
+
+		// configuring animations
+
+		idle_legs->Add_Frame ( 4, 4, 1 );
+		idle_head->Add_Frame ( 0, 0, 1 );
+
+		walking_legs->Add_Frame ( 1, 4, 1 );
+		walking_head->Add_Frame ( 5, 8, 1 );
+
+		swing_animation->Add_Frame ( 9, 12, 1 );
+		fists_animation->Add_Frame ( 0, 3, 1 );
+		throw_animation->Add_Frame ( 13, 14, 1 );
+
+		// configuring Animator
+		obj->Add_Component < Animator > ( )
+			->New_Node ( "idle" )
+				->Add_Animation ( "idle", idle_legs )
+				->Add_Animation ( "idle", idle_head )
+			->New_Node ( "walking" )
+				->Add_Animation ( "walking", walking_legs )
+				->Add_Animation ( "walking", walking_head )
+			->New_Node ( "swing" )
+				->Add_Animation ( "swing", swing_animation )
+			->New_Node ( "punch" )
+				->Add_Animation ( "punch", fists_animation )
+			->New_Node ( "throw" )
+				->Add_Animation ( "throw", throw_animation );
 	}
 
 	void Update ( ) override
