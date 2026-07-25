@@ -88,7 +88,7 @@ public:
 		}
 		
 		_target_direction = normalize ( target_direction );
-		_rigid->velocity = target_direction * move_speed;
+		_rigid->velocity = _target_direction * move_speed;
 
 		// orientation
 		if ( !_head_locked_by_setting_attack_direction )
