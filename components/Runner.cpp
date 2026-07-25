@@ -96,6 +96,7 @@ public:
 		Manager::Make < Animation < int > > ( "fists_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
 		Manager::Make < Animation < int > > ( "throw_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
 
+		/*
 		Manager::Make < Animation < float > > ( "weapon_swing" + weapon_name, &(obj->Get_Transform ( ).Expose_2D_Rot ( )), PlayMode::ONCE );
 		auto swing = Manager::Get < Animation < float > > ( "weapon_swing" + weapon_name );
 
@@ -104,6 +105,7 @@ public:
 		obj	->Add_Component < Animator > ( )
 				->New_Node ( "swing" )
 				->Add_Animation ( "swing", swing );
+		*/
 	}
 
 	void Update ( ) override
