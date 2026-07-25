@@ -1,4 +1,5 @@
 #define DIAGNOSTIC
+#pragma once
 #include <engine.hpp>
 
 class Weapon : public Behaviour

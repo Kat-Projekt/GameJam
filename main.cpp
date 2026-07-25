@@ -25,7 +25,9 @@ int load ( )
 	result += Manager::Make < Font > ( AOVEL_SANS_ROUNDED_FONT, AOVEL_SANS_ROUNDED_FONT_PATH, 90 );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD FONT" ); }
 
-	Manager::Register(AOVEL_SANS_ROUNDED_FONT , Manager::Get< Font > (AOVEL_SANS_ROUNDED_FONT)->Get_Texture());
+	Manager::Objekt_Load ( "Main Camera" );
+	Manager::Camera_Bind ( "Camera", "Main Camera" );
+
 	return result;
 }
 

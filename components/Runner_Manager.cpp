@@ -1,5 +1,6 @@
 #include <engine.hpp>
 #include "file_refes.h"
+#include "Runner.cpp"
 
 class Runner_Manager : public Behaviour
 {
@@ -21,7 +22,7 @@ public:
 	) {
 		auto _runner = Manager::Objekt_Load ( name, spawn_point );
 
-		_runner->Add_Component ( "Runner" );
+		_runner->Add_Component < Runner >( )->Set ( head, legs );
 		_runner->Add_Component ( controller );
 
 		obj->Add_Child ( _runner );

@@ -16,7 +16,10 @@ private:
 	float _time = 30.0f;
 	std::string displaid_time = "";
 
-	Text* _text_text = nullptr;
+	int _head = 0;
+	int _legs = 0;
+
+	Text* _remaining_time = nullptr;
 	Rigidbody* _rigid = nullptr;
 
 	Weapon* _weapon = nullptr;
@@ -40,25 +43,36 @@ public:
 
 	void Start ( ) override
 	{
-		auto _testa = std::make_shared < Objekt > ( "testa" );
-		auto _gambe = std::make_shared < Objekt > ( "gambe" );
-		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto" );
-		auto _numbe = std::make_shared < Objekt > ( "player_number" );
-
-		_gambe->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {15,2}, head );
-
-		_testa->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {15,2}, legs );
-
-
 		_rigid = obj->Add_Component < Rigidbody > ( );
 		obj->Add_Component < Box_Collider > ( )->Set_Size ( obj->Get_Size ( ) );
+		
+		auto _testa = std::make_shared < Objekt > ( "testa" );
+		auto _gambe = std::make_shared < Objekt > ( "gambe" );
+		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,20,0}, vec3{40,40,40} );
+		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,-20,0}, vec3{20,20,20} );
 
-		_text_text = obj->Add_Component < Text > ( )
-			->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
+		_gambe->Add_Component < Sprite > ( )
+			->Set ( RUNNERS_SHEET, "", "", {15,2}, _head )
+			.Set ( true );
+
+		_testa->Add_Component < Sprite > ( )
+			->Set ( RUNNERS_SHEET, "", "", {15,2}, _legs )
+			.Set ( true );
+
+		_remaining_time = _tempo->Add_Component < Text > ( )
+			->Set ( AOVEL_SANS_ROUNDED_FONT, "", "" )
 			->Set ( "", Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
 			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} );
+		
+		_numbe->Add_Component < Text > ( )
+			->Set ( AOVEL_SANS_ROUNDED_FONT, "", "" )
+			->Set ( std::to_string ( _head ) + std::to_string ( _legs )  , Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
+			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} );
+
+		obj->Add_Child ( _gambe );
+		obj->Add_Child ( _testa );
+		obj->Add_Child ( _tempo );
+		obj->Add_Child ( _numbe );
 	}
 
 	void Update ( ) override
@@ -84,7 +98,7 @@ public:
 		if ( new_time != displaid_time )
 		{
 			displaid_time = new_time;
-			_text_text->Set ( displaid_time );
+			_remaining_time->Set ( displaid_time );
 		}
 
 		// animation
@@ -227,6 +241,7 @@ public:
 
 	void Set ( int head, int legs )
 	{
-		
+		_head = head;
+		_legs = legs;
 	}
 };
