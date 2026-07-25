@@ -19,6 +19,7 @@ public:
 
 	void Update ( )
 	{
+		float dt = Timer::Get_Delta ( );
 		glm::vec2 dpos = {0,0};
 		glm::vec2 dlook = {0,0};
 		bool _throw = 0;
@@ -36,8 +37,9 @@ public:
 		if ( ReKat::Graphik::Key_Pressed( "Down" ) ) { dlook += glm::vec2{0,-1}; }
 		
 		if ( ReKat::Graphik::Key_Down( "E" ) ) { _puppet->PickWeapon ( ); }
-		if ( ReKat::Graphik::Key_Down( "Q" ) ) { _puppet->Throw ( ); }
-		if ( ReKat::Graphik::Key_Down( "Shift" ) ) { _puppet->Throw ( ); }
+		if ( ReKat::Graphik::Key_Down( "Shift" ) ) { _puppet->Start_Charging_Throw ( ); }
+		if ( ReKat::Graphik::Key_Pressed( "Shift" ) ) { _puppet->Update_Charging_Throw ( dt ); }
+		if ( ReKat::Graphik::Key_Up( "Shift" ) ) { _puppet->Release_Throw ( ); }
 		if ( ReKat::Graphik::Key_Down( "Space" ) ) { _puppet->Swing ( ); }
 
 		_puppet->SetDirection ( vec3{dpos,0.0f} );
