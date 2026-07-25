@@ -33,7 +33,13 @@ private:
 
 	void RotateHead ( float _angle )
 	{
-		obj->Set_2D_Rot ( _angle ); // this is for head
+		obj->Get_Child ( "testa" )->Set_2D_Rot ( _angle ); // this is for head
+		obj->Get_Child ( "tempo_rimasto" )->Set_2D_Rot ( _angle ); // this is for head
+		obj->Get_Child ( "player_number" )->Set_2D_Rot ( _angle ); // this is for head
+		if ( _weapon != nullptr )
+		{
+			_weapon->obj->Set_2D_Rot ( _angle );
+		}
 	}
 public:
 	Runner ( )
@@ -48,8 +54,8 @@ public:
 		
 		auto _testa = std::make_shared < Objekt > ( "testa" );
 		auto _gambe = std::make_shared < Objekt > ( "gambe" );
-		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,20,0}, vec3{40,40,40} );
-		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,-20,0}, vec3{20,20,20} );
+		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{0,0.2,0} );
+		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{0,-0.2,0} );
 
 		_gambe->Add_Component < Sprite > ( )
 			->Set ( RUNNERS_SHEET, "", "", {15,2}, _head )
