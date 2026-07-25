@@ -16,6 +16,8 @@ int load ( )
 	result += Manager::Make < Texture > ( "coco", "coconut.jpg" );
 	result += Manager::Make < Texture > ( RUNNERS_SHEET, RUNNERS_SHEET_PATH ); // runners sprite sheet
 	result += Manager::Make < Texture > ( WEAPONS_SHEET, WEAPONS_SHEET_PATH ); // weapons sprite sheet
+	result += Manager::Make < Texture > ( OBSTACLES_SHEET, OBSTACLES_SHEET_PATH ); // obstacles sprite sheet
+	result += Manager::Make < Texture > ( TILES_SHEET, TILES_SHEET_PATH ); // tiles sprite sheet
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
 	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders
