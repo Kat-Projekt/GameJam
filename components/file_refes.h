@@ -20,6 +20,10 @@
 #define NES_CRT_SHADER_FS_PATH "Shaders/Nes_Crt_Effect.fs"
 #define NES_CRT_SHADER_VS_PATH "Shaders/Crt_Effect.vs"
 
+#define TILEMAP_SHADER "TILEMAP_SHADER"
+#define TILEMAP_SHADER_FS_PATH "Shaders/tilemap.fs"
+#define TILEMAP_SHADER_VS_PATH "Shaders/tilemap.vs"
+
 #define AOVEL_SANS_ROUNDED_FONT "AOVEL_SANS_ROUNDED_FONT"
 #define AOVEL_SANS_ROUNDED_FONT_PATH "Fonts/AovelSansRounded.ttf"
 

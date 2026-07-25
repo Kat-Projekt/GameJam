@@ -27,10 +27,10 @@ public:
 		Manager::Objekt_Load ( "Chat", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
 
 		Manager::Objekt_Load ( "Ambient" )
-			->Add_Child ( "Background")
+			->Add_Child ( "Runners")
 			.Add_Child ( "Chat" )
 			.Add_Child ( "Weapons" )
-			.Add_Child ( "Runners" );
+			.Add_Child ( "Background" );
 
 		obj->Add_Child ( "Ambient" );
 		

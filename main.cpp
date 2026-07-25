@@ -21,7 +21,8 @@ int load ( )
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
 	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders
-	result += Manager::Make < Shader > ( NES_CRT_SHADER, NES_CRT_SHADER_VS_PATH, NES_CRT_SHADER_FS_PATH);
+	result += Manager::Make < Shader > ( NES_CRT_SHADER, NES_CRT_SHADER_VS_PATH, NES_CRT_SHADER_FS_PATH );
+	result += Manager::Make < Shader > ( TILEMAP_SHADER, TILEMAP_SHADER_VS_PATH, TILEMAP_SHADER_FS_PATH );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD SHADERS" ); }
 	// fonts
 	result += Manager::Make < Font > ( AOVEL_SANS_ROUNDED_FONT, AOVEL_SANS_ROUNDED_FONT_PATH, 90 );
@@ -51,33 +52,12 @@ int main ( )
 	DEBUG ( 3, "Resources Loaded" );
 
 	Manager::Objekt_Load ( "Main menu" )->Add_Component ( "Scenario" );
-	//Manager::Objekt_Load ( "Main menu", vec3{0,0,0}, vec3{550,500,10} )->Add_Component <Sprite> ( )
-	//-> Set ( "Aovel" ).Set(true);
-	
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
 	//	.Set ( NES_CRT_SHADER, "", true )
 		.Set ( Manager::Objekt_Get ( "Main menu" ) );
 
-	// Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Sprite > ( )->Set ( "logo", "crt_effect" ).Set ( true );
-
-	auto Pino = Manager::Objekt_Load("Pino", {-300,0,0});
-
-	auto collider = Pino->Add_Component < Box_Collider > ( );
-	collider->Set_Size({100,100,0});
-
-	Pino->Add_Component<Sprite>()
-	->Set("logo", "", "", {1,1}, 0)
-	->Set(true);
-
-	DEBUG(3, "Pino collider exists: ", collider != nullptr);
-	DEBUG(3, "Pino collider active: ", collider->Get_Active());
-	DEBUG(3, "Pino active: ", Pino->Get_Active());
-	DEBUG(3, "Pino is static: ", collider->Is_Static());
-
-	Manager::Objekt_Get("Main menu")
-	->Add_Child("Pino");
 
 	Manager::Set_Active_Scene ( "FrameBuffer" );	
 
