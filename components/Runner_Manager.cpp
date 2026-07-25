@@ -14,31 +14,17 @@ public:
 
 	Runner_Manager* Register (
 		std::string name,
-		int sprite,
-		int temp,
+		int head,
+		int legs,
 		vec3 spawn_point,
 		std::string controller
 	) {
-		auto _testa = Manager::Objekt_Load ( name, spawn_point );
-		auto _gambe = std::make_shared < Objekt > ( "gambe" );
+		auto _runner = Manager::Objekt_Load ( name, spawn_point );
 
-		_gambe->Add_Component < Sprite > ( )
-<<<<<<< HEAD
-			->Set ( RUNNER_SHEET, "", "", {4,1}, sprite_gambe )
-=======
-			->Set ( RUNNERS_SHEET, "", "", {4,1}, sprite )
->>>>>>> 74f9e453464425ca0c6d57ab90ae7a5486434e9f
-			.Set ( true ); // 4 animation frames
+		_runner->Add_Component ( "Runner" );
+		_runner->Add_Component ( controller );
 
-		_testa->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {2,2}, sprite )
-			.Set ( true ); // only the head
-
-		_testa->Add_Component ( "Runner" );
-		_testa->Add_Component ( controller );
-
-		_testa->Add_Child ( _gambe );
-		obj->Add_Child ( _testa );
+		obj->Add_Child ( _runner );
 
 		return this;
 	}
@@ -57,7 +43,7 @@ public:
 			->Set_Trigger ( true );
 		
 		_weapon->Add_Component < Sprite > ( )
-			->Set ( WEAPONS_SHEET, "", "", {2,2}, sprite_number )
+			->Set ( WEAPONS_SHEET, "", "", {16,1}, sprite_number )
 			.Set ( true );
 
 		_weapon->Add_Component < Weap > ( );

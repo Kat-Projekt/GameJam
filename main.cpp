@@ -21,7 +21,6 @@ int load ( )
 	// shaders
 	result += Manager::Make < Shader > ( NES_CRT_SHADER, NES_CRT_SHADER_VS_PATH, NES_CRT_SHADER_FS_PATH);
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD SHADERS" ); }
-
 	// fonts
 	result += Manager::Make < Font > ( AOVEL_SANS_ROUNDED_FONT, AOVEL_SANS_ROUNDED_FONT_PATH, 90 );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD FONT" ); }

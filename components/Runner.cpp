@@ -40,6 +40,18 @@ public:
 
 	void Start ( ) override
 	{
+		auto _testa = std::make_shared < Objekt > ( "testa" );
+		auto _gambe = std::make_shared < Objekt > ( "gambe" );
+		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto" );
+		auto _numbe = std::make_shared < Objekt > ( "player_number" );
+
+		_gambe->Add_Component < Sprite > ( )
+			->Set ( RUNNERS_SHEET, "", "", {15,2}, head );
+
+		_testa->Add_Component < Sprite > ( )
+			->Set ( RUNNERS_SHEET, "", "", {15,2}, legs );
+
+
 		_rigid = obj->Add_Component < Rigidbody > ( );
 		obj->Add_Component < Box_Collider > ( )->Set_Size ( obj->Get_Size ( ) );
 
@@ -211,5 +223,10 @@ public:
 			DEBUG ( 4, "Candidate Exit: ", _candidate_for_pick_up->Get_Name ( ) );
 			_candidate_for_pick_up = nullptr;
 		}
+	}
+
+	void Set ( int head, int legs )
+	{
+		
 	}
 };
