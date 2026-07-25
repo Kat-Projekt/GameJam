@@ -4,7 +4,7 @@
 
 class Weapon : public Behaviour
 {
-private:
+protected:
 	std::string weapon_name;
 public:
 	Weapon ( )
