@@ -22,3 +22,6 @@
 
 #define AOVEL_SANS_ROUNDED_FONT "AOVEL_SANS_ROUNDED_FONT"
 #define AOVEL_SANS_ROUNDED_FONT_PATH "Fonts/AovelSansRounded.ttf"
+
+#define TILEMAP_PATH "Tilemap/Factory_Floor.csv"
+#define TILEMAP_COLLISIONS_PATH "Tilemap/Factory_Collisions.csv"
