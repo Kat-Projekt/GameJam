@@ -27,6 +27,11 @@ private:
 	vec3 _attack_point = {0,0,0};
 
 	int _head_locked_by_setting_attack_direction = 0;
+
+	void RotateHead ( float _angle )
+	{
+		obj->Set_2D_Rot ( _angle ); // this is for head
+	}
 public:
 	Runner ( )
 	{
@@ -93,7 +98,7 @@ public:
 		// orientation
 		if ( !_head_locked_by_setting_attack_direction )
 		{
-			obj->Set_2D_Rot ( angle ( _target_direction ) ); // this is for head
+			RotateHead ( angle ( _target_direction ) ); // this is for head
 		}
 
 		obj->Get_Child ( "gambe" )->Set_2D_Rot ( angle ( _target_direction ) ); // this is for legs
@@ -123,7 +128,7 @@ public:
 
 		_head_locked_by_setting_attack_direction = 2;
 
-		obj->Set_2D_Rot ( angle ( _attack_point ) ); // this is for head
+		RotateHead ( angle ( _attack_point ) ); // this is for head
 	}
 
 	void Swing ( )
@@ -172,9 +177,14 @@ public:
 		DEBUG ( 5, "Player: ", obj->Get_Name ( ), " Prize: ", value );
 		_time += value;
 	}
-	void Killed ( Objekt* )
+	void Killed ( Objekt* _obj )
 	{
-		obj->Get_Component < Runner > ( )->Reward ( _time / 3.0f );
+		if ( _obj == obj && _time > 0 )
+		{ return; }
+
+		DEBUG ( 3, "Runner: ", obj->Get_Name ( ), " Killed by: ", _obj->Get_Name ( ) );
+		_obj->Get_Component < Runner > ( )->Reward ( _time / 3.0f );
+		// deactivate this
 		obj->Set_Active ( false );
 	}
 
@@ -183,7 +193,7 @@ public:
 		Weapon * _weapon_componet = _obj->Get_Component < Weapon > ( );
 		if ( _weapon_componet )
 		{
-			if ( _weapon_componet->IsPickable ( ) )
+			if ( _obj != obj && _weapon_componet->IsPickable ( ) )
 			{
 				_candidate_for_pick_up = _obj;
 				DEBUG ( 4, "Candidate Enter: ", _candidate_for_pick_up->Get_Name ( ) );

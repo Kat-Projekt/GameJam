@@ -23,7 +23,11 @@ public:
 		auto _gambe = std::make_shared < Objekt > ( "gambe" );
 
 		_gambe->Add_Component < Sprite > ( )
+<<<<<<< HEAD
+			->Set ( RUNNER_SHEET, "", "", {4,1}, sprite_gambe )
+=======
 			->Set ( RUNNERS_SHEET, "", "", {4,1}, sprite )
+>>>>>>> 74f9e453464425ca0c6d57ab90ae7a5486434e9f
 			.Set ( true ); // 4 animation frames
 
 		_testa->Add_Component < Sprite > ( )
