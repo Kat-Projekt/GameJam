@@ -29,3 +29,5 @@
 
 #define TILEMAP_PATH "Tilemap/Factory_Floor.csv"
 #define TILEMAP_COLLISIONS_PATH "Tilemap/Factory_Collisions.csv"
+
+#define MAIN_CAMERA "Main Camera"

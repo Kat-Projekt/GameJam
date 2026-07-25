@@ -1,6 +1,30 @@
 #include "engine.hpp"
 #include "components/file_refes.h"
 
+class Discrete_Camera : public Camera
+{
+public:
+	Discrete_Camera ( )
+	{
+		Informations = { "Discrete_Camera", 1, "Cadssad" };
+	}
+
+	glm::mat4 Projkection
+	( ) override {
+		float X = ReKat::Graphik::_current_window->Screen_Ratio;
+		if ( fb_scale != nullptr ) 
+		{ X = *fb_scale; }
+		X *= 500.0f * Scale;
+		float Y = 500.0f * Scale;
+		vec3 pos = obj->Get_Pos ( ); 
+		// dicretize position
+		pos.x = std::round(pos.x / (X*2)) * (X*2);
+		pos.y = std::round(pos.y / (Y*2)) * (Y*2);
+
+		return glm::ortho ( pos.x - X, pos.x + X, pos.y - Y, pos.y + Y, -1.0f, 1.0f );
+	}
+};
+
 int load ( )
 {
 	int result = 0;
@@ -28,8 +52,11 @@ int load ( )
 	result += Manager::Make < Font > ( AOVEL_SANS_ROUNDED_FONT, AOVEL_SANS_ROUNDED_FONT_PATH, 90 );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD FONT" ); }
 
-	Manager::Objekt_Load ( "Main Camera" );
-	Manager::Camera_Bind ( "Camera", "Main Camera" );
+	Manager::Camera_Rename ( MAIN_CAMERA,
+		Manager::Objekt_Load ( MAIN_CAMERA )->Add_Component < Discrete_Camera > ( )
+	);
+	
+
 
 	return result;
 }
@@ -55,9 +82,8 @@ int main ( )
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
-	//	.Set ( NES_CRT_SHADER, "", true )
+		.Set ( NES_CRT_SHADER, "", true )
 		.Set ( Manager::Objekt_Get ( "Main menu" ) );
-
 
 	Manager::Set_Active_Scene ( "FrameBuffer" );	
 
