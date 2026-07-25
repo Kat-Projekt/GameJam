@@ -169,7 +169,7 @@ public:
 
 	void Swing ( )
 	{
-		if ( _next_attack_window < Timer::Get_Time ( ) )
+		if ( _next_attack_window > Timer::Get_Time ( ) )
 		{
 			DEBUG ( 4, "Already attacke wait" );
 			return;
@@ -184,7 +184,7 @@ public:
 	}
 	int Throw ( )
 	{
-		if ( _next_attack_window < Timer::Get_Time ( ) )
+		if ( _next_attack_window > Timer::Get_Time ( ) )
 		{
 			DEBUG ( 4, "Already attacke wait" );
 			return 1;

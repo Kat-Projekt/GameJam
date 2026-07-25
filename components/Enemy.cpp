@@ -14,8 +14,8 @@ private:
 	//pointer to runner
 	Runner* runner = nullptr;
 	/* data */
-	float detection_radius = 200.0f;  // Raggio rilevamento nemici
-	float stopping_distance = 1.0f;   // distanza minima dal target
+	float detection_radius = 100.0f;  // Raggio rilevamento nemici
+	float stopping_distance = 250.0f;   // distanza minima dal target
 
 	// Limiti di tempo per il movimento casuale
 	const float min_move_time = 1.5f;       // Tempo minimo di camminata
@@ -28,6 +28,8 @@ private:
 	// Timer cooldown
 	const float max_cooldown_timer = 3.0f;   // Timer cooldown chase
 
+	const float attack_cooldown = 1.0f;      //timer cooldown attack
+
 	// --- STATO ATTUALE ---
 	State current_state = State::Idle;
 	
@@ -36,6 +38,7 @@ private:
 	
 	float state_timer = 0.0f;         // Timer generico (usato per pause o tempo di camminata)
 	float cooldown_timer = 0.0f;      // Timer cooldown da chase dopo collisioni
+	float attack_cooldown_timer = 0.0f; //Timer cooldown attacco
 	//setup: atttach sprite, rigid body, collider
 	//update: target position, target, 
 
@@ -174,9 +177,30 @@ private:
 			current_state = State::Idle;
 		}
 	}
-	void Update_ChasingEnemy()
+	void Update_ChasingEnemy( float dt )
 	{
 		if (!enemy_target || !runner) return;
+
+		if ( attack_cooldown_timer > 0.0f )
+		{ attack_cooldown_timer -= dt; }
+
+
+		vec3 to_target = enemy_target->Get_Pos() - obj->Get_Pos();
+		float dist = glm::length(to_target);
+
+		if (dist <= stopping_distance)
+		{
+			runner->Stay();
+			runner->SetAttackDirection(to_target);
+
+			if (attack_cooldown_timer <= 0.0f)
+			{
+				runner->Swing();
+				attack_cooldown_timer = attack_cooldown;
+			}
+			return;
+		}
+
 		runner->SetTarget(enemy_target->Get_Pos());
 	}
 public:
@@ -214,7 +238,7 @@ public:
 			break;
 
 			case State::ChasingEnemy:
-			Update_ChasingEnemy();
+			Update_ChasingEnemy(dt);
 			break;
 		}
 	}
