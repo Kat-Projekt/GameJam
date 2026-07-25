@@ -86,14 +86,12 @@ public:
 		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{-0.2,0.6,0} );
 
 		auto _gambe_sprite = _gambe->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {15,2} )
-			->Set ( _color )
-			->Set ( true );
+			->Set ( RUNNERS_SHEET, "", MAIN_CAMERA, {15,2} )
+			->Set ( _color );
 
 		auto _testa_sprite = _testa->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {15,2} )
-			->Set ( _color )
-			->Set ( true );
+			->Set ( RUNNERS_SHEET, "", MAIN_CAMERA, {15,2} )
+			->Set ( _color );
 
 		_remaining_time = _tempo->Add_Component < Text > ( )
 			->Set ( AOVEL_SANS_ROUNDED_FONT, "", "" )

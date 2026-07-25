@@ -46,7 +46,7 @@ public:
 			->Set_Trigger ( true );
 		
 		_weapon->Add_Component < Sprite > ( )
-			->Set ( WEAPONS_SHEET, "", "", {16,1}, sprite_number )
+			->Set ( WEAPONS_SHEET, "", MAIN_CAMERA, {16,1}, sprite_number )
 			->Set ( true );
 
 		_weapon->Add_Component < Weap > ( );
