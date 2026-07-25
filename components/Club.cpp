@@ -6,6 +6,12 @@ class Club : public Weapon
 private:
 	/* data */
 public:
+	Weapon ( )
+	{
+		Informations = { "Weapon", 1.0, "This is the weapons information" };
+		weapon_name  = "Club";
+	}
+
 	virtual void Swing ( ) { }
 
 	virtual int Throw ( ) { return 0; }
