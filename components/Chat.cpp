@@ -1,3 +1,4 @@
+#pragma once
 #include <engine.hpp>
 #include <fstream>
 #include <random>
@@ -85,6 +86,10 @@ public:
 		}
 	}
 
+	void PlayerDeath ( std::string player )
+	{
+		Post ( "PLAYER_DEATH", player );
+	}
 	void Post ( std::string user, std::string message, bool super = false ) {
 		int padd = 0;
 
@@ -93,7 +98,12 @@ public:
 			padd = chat.size ( ) - 4;
 		}
 
-		if ( super )
+		if ( user == "PLAYER_DEATH" )
+		{
+			super_chat.append ( message + " is dead" );
+			chat.append ( "" );
+		}
+		else if ( super )
 		{
 			super_chat.append (  user + ": " + message );
 			chat.append ( "" );

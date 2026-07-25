@@ -24,11 +24,11 @@ public:
 			->Register_weapon < Club > ( "club", 1, {0,-200,0}, {50,50,50} );
 
 		Manager::Objekt_Load ( "Donators" );
-		Manager::Objekt_Load ( "UI", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
+		Manager::Objekt_Load ( "Chat", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
 
 		Manager::Objekt_Load ( "Ambient" )
 			->Add_Child ( "Background")
-			.Add_Child ( "UI" )
+			.Add_Child ( "Chat" )
 			.Add_Child ( "Donators" )
 			.Add_Child ( "Runners" )
 			.Add_Child ( "Weapons" );

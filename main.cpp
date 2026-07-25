@@ -55,7 +55,7 @@ int main ( )
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
-		.Set ( NES_CRT_SHADER, "", true )
+	//	.Set ( NES_CRT_SHADER, "", true )
 		.Set ( Manager::Objekt_Get ( "Main menu" ) );
 
 	// Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Sprite > ( )->Set ( "logo", "crt_effect" ).Set ( true );

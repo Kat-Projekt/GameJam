@@ -3,6 +3,7 @@
 #include <engine.hpp>
 #include "Weapon.cpp"
 #include "file_refes.h"
+#include "Chat.cpp"
 
 class Hands : public Weapon
 {
@@ -31,6 +32,9 @@ private:
 
 	int _head_locked_by_setting_attack_direction = 0;
 
+	float _next_attack_window = 0;
+	float _attack_cooldown = 0.5f;
+
 	void RotateHead ( float _angle )
 	{
 		obj->Get_Child ( "testa" )->Set_2D_Rot ( _angle ); // this is for head
@@ -52,17 +56,17 @@ public:
 		_rigid = obj->Add_Component < Rigidbody > ( );
 		obj->Add_Component < Box_Collider > ( )->Set_Size ( obj->Get_Size ( ) );
 		
-		auto _testa = std::make_shared < Objekt > ( "testa" );
-		auto _gambe = std::make_shared < Objekt > ( "gambe" );
-		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{0,0.2,0} );
-		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{0,-0.2,0} );
+		auto _testa = std::make_shared < Objekt > ( "testa", vec3{0,0,0}, vec3{200,200,200} );
+		auto _gambe = std::make_shared < Objekt > ( "gambe", vec3{0,0,0}, vec3{200,200,200} );
+		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{0,-0.2,0} );
+		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{0,0.6,0} );
 
 		_gambe->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {15,2}, _head )
+			->Set ( RUNNERS_SHEET, "", "", {15,2}, _legs )
 			.Set ( true );
 
 		_testa->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {15,2}, _legs )
+			->Set ( RUNNERS_SHEET, "", "", {15,2}, _head )
 			.Set ( true );
 
 		_remaining_time = _tempo->Add_Component < Text > ( )
@@ -75,8 +79,8 @@ public:
 			->Set ( std::to_string ( _head ) + std::to_string ( _legs )  , Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
 			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} );
 
-		obj->Add_Child ( _gambe );
 		obj->Add_Child ( _testa );
+		obj->Add_Child ( _gambe );
 		obj->Add_Child ( _tempo );
 		obj->Add_Child ( _numbe );
 	}
@@ -165,14 +169,28 @@ public:
 
 	void Swing ( )
 	{
+		if ( _next_attack_window < Timer::Get_Time ( ) )
+		{
+			DEBUG ( 4, "Already attacke wait" );
+			return;
+		}
+
+		_next_attack_window = Timer::Get_Time ( ) + _attack_cooldown;
 		DEBUG ( 3, "Swing" );
 		if ( _weapon )
 		{ _weapon->Swing ( ); }
 		else
 		{ _hands.Swing( ); }
 	}
-	void Throw ( )
+	int Throw ( )
 	{
+		if ( _next_attack_window < Timer::Get_Time ( ) )
+		{
+			DEBUG ( 4, "Already attacke wait" );
+			return 1;
+		}
+
+		_next_attack_window = Timer::Get_Time ( ) + _attack_cooldown;
 		DEBUG ( 3, "Throw" );
 		if ( _weapon )
 		{
@@ -186,10 +204,15 @@ public:
 		}
 		else
 		{ _hands.Throw( ); }
+
+		return 0;
 	}
 
 	void PickWeapon ( )
 	{
+		if ( Throw ( ) != 0 )
+		{ return; }
+
 		if ( _weapon != nullptr )
 		{ return; }
 		
@@ -218,6 +241,8 @@ public:
 		_obj->Get_Component < Runner > ( )->Reward ( _time / 3.0f );
 		// deactivate this
 		obj->Set_Active ( false );
+
+		Manager::Objekt_Get ( "Chat" )->Get_Component < Chat > ( )->PlayerDeath ( obj->Get_Name ( ) );
 	}
 
 	void Collision_Trigger_Enter ( Objekt* _obj ) override
