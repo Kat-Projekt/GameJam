@@ -19,6 +19,8 @@ public:
 	}
 };
 
+int _Lerp ( int a, int b, float t ) { return a + (b - a) * t; }
+
 class Runner : public Behaviour
 {
 private:
@@ -26,8 +28,8 @@ private:
 	float _time = 30.0f;
 	std::string displaid_time = "";
 
-	int _head = 0;
-	int _legs = 0;
+	vec4 _color = {1,1,1,1};
+	int _player_number = 0;
 
 	Text* _remaining_time = nullptr;
 	Rigidbody* _rigid = nullptr;
@@ -67,26 +69,28 @@ public:
 		
 		auto _testa = std::make_shared < Objekt > ( "testa", vec3{0,0,0}, vec3{200,200,200} );
 		auto _gambe = std::make_shared < Objekt > ( "gambe", vec3{0,0,0}, vec3{200,200,200} );
-		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{-0.25,-0.2+0.75,0} );
-		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{-0.5,0.6+1.5,0} );
+		auto _tempo = std::make_shared < Objekt > ( "tempo_rimasto", vec3{0,0,0}, vec3{40,40,40}, vec3{-0.1,-0.2,0} );
+		auto _numbe = std::make_shared < Objekt > ( "player_number", vec3{0,0,0}, vec3{20,20,20}, vec3{-0.2,0.6,0} );
 
 		auto _gambe_sprite = _gambe->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {15,2}, _legs )
-			.Set ( true );
+			->Set ( RUNNERS_SHEET, "", "", {15,2} )
+			->Set ( _color )
+			->Set ( true );
 
 		auto _testa_sprite = _testa->Add_Component < Sprite > ( )
-			->Set ( RUNNERS_SHEET, "", "", {15,2}, _head )
-			.Set ( true );
+			->Set ( RUNNERS_SHEET, "", "", {15,2} )
+			->Set ( _color )
+			->Set ( true );
 
 		_remaining_time = _tempo->Add_Component < Text > ( )
 			->Set ( AOVEL_SANS_ROUNDED_FONT, "", "" )
 			->Set ( "", Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
-			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} );
+			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} - _color + vec4{0,0,0,1});
 		
 		_numbe->Add_Component < Text > ( )
 			->Set ( AOVEL_SANS_ROUNDED_FONT, "", "" )
-			->Set ( std::to_string ( _head ) + std::to_string ( _legs )  , Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
-			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} );
+			->Set ( std::to_string ( _player_number ) , Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
+			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} - _color + vec4{0,0,0,1} );
 
 		obj->Add_Child ( _testa );
 		obj->Add_Child ( _gambe );
@@ -95,26 +99,55 @@ public:
 
 		// creating animations
 		std::string n = obj->Get_Name ( );
-		Manager::Make < Animation < int > > ( "idle_legs" + n, &(_gambe_sprite._frame), PlayMode::LOOP );
-		Manager::Make < Animation < int > > ( "idle_head" + n, &(_testa_sprite._frame), PlayMode::LOOP );
+		Manager::Make < Animation < int > > ( "idle_legs" + n, &(_gambe_sprite->_frame), PlayMode::LOOP );
+		Manager::Make < Animation < int > > ( "idle_head" + n, &(_testa_sprite->_frame), PlayMode::LOOP );
 
-		Manager::Make < Animation < int > > ( "walking_legs" + n, &(_gambe_sprite._frame), PlayMode::LOOP );
-		Manager::Make < Animation < int > > ( "walking_head" + n, &(_testa_sprite._frame), PlayMode::LOOP );
+		Manager::Make < Animation < int > > ( "walking_legs" + n, &(_gambe_sprite->_frame), PlayMode::LOOP );
+		Manager::Make < Animation < int > > ( "walking_head" + n, &(_testa_sprite->_frame), PlayMode::LOOP );
 
-		Manager::Make < Animation < int > > ( "swing_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
-		Manager::Make < Animation < int > > ( "fists_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
-		Manager::Make < Animation < int > > ( "throw_animation" + n, &(_testa_sprite._frame), PlayMode::ONCE );
+		Manager::Make < Animation < int > > ( "swing_animation" + n, &(_testa_sprite->_frame), PlayMode::ONCE );
+		Manager::Make < Animation < int > > ( "fists_animation" + n, &(_testa_sprite->_frame), PlayMode::ONCE );
+		Manager::Make < Animation < int > > ( "throw_animation" + n, &(_testa_sprite->_frame), PlayMode::ONCE );
 
-		/*
-		Manager::Make < Animation < float > > ( "weapon_swing" + weapon_name, &(obj->Get_Transform ( ).Expose_2D_Rot ( )), PlayMode::ONCE );
-		auto swing = Manager::Get < Animation < float > > ( "weapon_swing" + weapon_name );
+		// getting animations
+		auto idle_legs		= Manager::Get < Animation < int > > ( "idle_legs" + n );
+		auto idle_head		= Manager::Get < Animation < int > > ( "idle_head" + n );
 
-		swing	->Add_Frame ( -M_PI_4, M_PI_4, 1 );
+		auto walking_legs	= Manager::Get < Animation < int > > ( "walking_legs" + n );
+		auto walking_head	= Manager::Get < Animation < int > > ( "walking_head" + n );
 
-		obj	->Add_Component < Animator > ( )
-				->New_Node ( "swing" )
-				->Add_Animation ( "swing", swing );
-		*/
+		auto swing_animation	= Manager::Get < Animation < int > > ( "swing_animation" + n );
+		auto fists_animation	= Manager::Get < Animation < int > > ( "fists_animation" + n );
+		auto throw_animation	= Manager::Get < Animation < int > > ( "throw_animation" + n );
+
+		// configuring animations
+
+		idle_legs->Add_Frame ( 15+0, 15+0, 1, &_Lerp );
+		idle_head->Add_Frame ( 4, 4, 1, &_Lerp );
+
+		walking_legs->Add_Frame ( 15+1, 15+4, 0.3, &_Lerp );
+		walking_head->Add_Frame ( 5, 8, 0.3, &_Lerp );
+
+		swing_animation->Add_Frame ( 9, 12, 1, &_Lerp );
+		fists_animation->Add_Frame ( 0, 3, 1, &_Lerp );
+		throw_animation->Add_Frame ( 13, 14, 1, &_Lerp );
+
+		// configuring Animator
+		obj->Add_Component < Animator > ( )
+			->New_Node ( "idle" )
+				->Add_Animation ( "idle", idle_legs )
+				->Add_Animation ( "idle", idle_head )
+			->New_Node ( "walking" )
+				->Add_Animation ( "walking", walking_legs )
+				->Add_Animation ( "walking", walking_head )
+			->New_Node ( "swing" )
+				->Add_Animation ( "swing", swing_animation )
+			->New_Node ( "punch" )
+				->Add_Animation ( "punch", fists_animation )
+			->New_Node ( "throw" )
+				->Add_Animation ( "throw", throw_animation );
+
+		obj->Get_Component < Animator > ( )->Change_Animation ( "idle" );
 	}
 
 	void Update ( ) override
@@ -151,6 +184,7 @@ public:
 	void Stay ( )
 	{
 		_rigid->velocity = vec3(0);
+		obj->Get_Component < Animator > ( )->Change_Animation ( "idle" );
 	}
 	void SetDirection ( vec3 target_direction )
 	{
@@ -170,6 +204,7 @@ public:
 		}
 
 		obj->Get_Child ( "gambe" )->Set_2D_Rot ( angle ( _target_direction ) ); // this is for legs
+		obj->Get_Component < Animator > ( )->Change_Animation ( "walking" );
 	}
 	void SetTarget ( vec3 target_position )
 	{
@@ -302,10 +337,10 @@ public:
 		}
 	}
 
-	void Set ( int head, int legs )
+	void Set ( vec4 color, int player_number )
 	{
-		_head = head;
-		_legs = legs;
+		_color = color;
+		_player_number = player_number;
 	}
 
 	bool Has_Weapon ( ) const { return _weapon != nullptr; }

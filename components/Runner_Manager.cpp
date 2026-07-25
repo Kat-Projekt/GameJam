@@ -15,14 +15,14 @@ public:
 
 	Runner_Manager* Register (
 		std::string name,
-		int head,
-		int legs,
+		int player_number,
+		vec4 color,
 		vec3 spawn_point,
 		std::string controller
 	) {
 		auto _runner = Manager::Objekt_Load ( name, spawn_point );
 
-		_runner->Add_Component < Runner >( )->Set ( head, legs );
+		_runner->Add_Component < Runner >( )->Set ( color, player_number );
 		_runner->Add_Component ( controller );
 
 		obj->Add_Child ( _runner );
@@ -47,7 +47,7 @@ public:
 		
 		_weapon->Add_Component < Sprite > ( )
 			->Set ( WEAPONS_SHEET, "", "", {16,1}, sprite_number )
-			.Set ( true );
+			->Set ( true );
 
 		_weapon->Add_Component < Weap > ( );
 
