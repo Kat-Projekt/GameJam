@@ -67,7 +67,7 @@ int main ( )
 
 	Pino->Add_Component<Sprite>()
 	->Set("logo", "", "", {1,1}, 0)
-	.Set(true);
+	->Set(true);
 
 	DEBUG(3, "Pino collider exists: ", collider != nullptr);
 	DEBUG(3, "Pino collider active: ", collider->Get_Active());

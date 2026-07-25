@@ -38,7 +38,7 @@ public:
 			->NotHover ( this, &MainMenu::NotHover );
 		
 		sprite = continue_button->Add_Component < Sprite > ( );
-		sprite->Set ( "logo", "", "", {2,1} ).Set ( true );
+		sprite->Set ( "logo", "", "", {2,1} )->Set ( true );
 
 		obj->Add_Child ( title );
 		obj->Add_Child ( continue_button );
