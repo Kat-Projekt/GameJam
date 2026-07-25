@@ -1,6 +1,7 @@
 #define DIAGNOSTIC
 
 #include <engine.hpp>
+#include "file_refes.h"
 
 class EndScreen : public Behaviour
 {
@@ -41,17 +42,17 @@ public:
 		std::shared_ptr < Text > coda_testa_component = std::make_shared < Text > ( );
 		std::shared_ptr < Text > coda_kat_component = std::make_shared < Text > ( );
 
-		coda_testa_component->Set ( "Aovel", "" )
+		coda_testa_component->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
 			->Set ( credits, Text::ALIGNMENT::CENTER, Text::ALIGNMENT::BOTTOM );
 
-		coda_sinistra_component->Set ( "Aovel", "" )
+		coda_sinistra_component->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
 			->Set ( coda_destra, Text::ALIGNMENT::RIGHT, Text::ALIGNMENT::TOP )
 			->Set ( vec4 { 1,0,0,1 } );
 
-		coda_destra_component->Set ( "Aovel", "" )
+		coda_destra_component->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
 			->Set ( coda_sinistra, Text::ALIGNMENT::LEFT, Text::ALIGNMENT::TOP );
 
-		coda_kat_component->Set ( "Aovel", "" )
+		coda_kat_component->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
 			->Set ( engine, Text::ALIGNMENT::LEFT, Text::ALIGNMENT::TOP );
 
 		obj->Add_Component ( coda_destra_component );

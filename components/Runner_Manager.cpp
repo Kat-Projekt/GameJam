@@ -1,4 +1,5 @@
 #include <engine.hpp>
+#include "file_refes.h"
 
 class Runner_Manager : public Behaviour
 {
@@ -13,8 +14,8 @@ public:
 
 	Runner_Manager* Register (
 		std::string name,
-		int sprite_testa,
-		int sprite_gambe,
+		int sprite,
+		int temp,
 		vec3 spawn_point,
 		std::string controller
 	) {
@@ -22,11 +23,11 @@ public:
 		auto _gambe = std::make_shared < Objekt > ( "gambe" );
 
 		_gambe->Add_Component < Sprite > ( )
-			->Set ( "legs", "", "", {4,1}, sprite_gambe )
+			->Set ( RUNNERS_SHEET, "", "", {4,1}, sprite )
 			.Set ( true ); // 4 animation frames
 
 		_testa->Add_Component < Sprite > ( )
-			->Set ( "head", "", "", {2,2}, sprite_testa )
+			->Set ( RUNNERS_SHEET, "", "", {2,2}, sprite )
 			.Set ( true ); // only the head
 
 		_testa->Add_Component ( "Runner" );
@@ -52,7 +53,7 @@ public:
 			->Set_Trigger ( true );
 		
 		_weapon->Add_Component < Sprite > ( )
-			->Set ( "weapons", "", "", {2,2}, sprite_number )
+			->Set ( WEAPONS_SHEET, "", "", {2,2}, sprite_number )
 			.Set ( true );
 
 		_weapon->Add_Component < Weap > ( );

@@ -2,6 +2,7 @@
 
 #include <engine.hpp>
 #include "Weapon.cpp"
+#include "file_refes.h"
 
 class Hands : public Weapon
 {
@@ -38,7 +39,7 @@ public:
 		obj->Add_Component < Box_Collider > ( )->Set_Size ( obj->Get_Size ( ) );
 
 		_text_text = obj->Add_Component < Text > ( )
-			->Set ( "Aovel", "" )
+			->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
 			->Set ( "", Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
 			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} );
 	}
