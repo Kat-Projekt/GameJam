@@ -99,12 +99,12 @@ public:
 			->Set ( _color );
 
 		_remaining_time = _tempo->Add_Component < Text > ( )
-			->Set ( AOVEL_SANS_ROUNDED_FONT, "", "" )
+			->Set ( AOVEL_SANS_ROUNDED_FONT, "", MAIN_CAMERA )
 			->Set ( "", Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
 			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} - _color + vec4{0,0,0,1});
 		
 		_numbe->Add_Component < Text > ( )
-			->Set ( AOVEL_SANS_ROUNDED_FONT, "", "" )
+			->Set ( AOVEL_SANS_ROUNDED_FONT, "", MAIN_CAMERA )
 			->Set ( std::to_string ( _player_number ) , Text::ALIGNMENT::CENTER, Text::ALIGNMENT::CENTER )
 			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} - _color + vec4{0,0,0,1} );
 
