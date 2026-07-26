@@ -23,6 +23,6 @@ public:
 		obj->Add_Component ( TmC );
 		obj->Set_Size ( {166.67,166.67,166.67} );
 
-		obj->Set_Pos ( {-3000,-4000,0} );
+		obj->Set_Pos ( {-3300,-4400,0} );
 	}
 };
