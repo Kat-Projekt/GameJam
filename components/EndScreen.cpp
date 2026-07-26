@@ -2,6 +2,7 @@
 
 #include <engine.hpp>
 #include "file_refes.h"
+#include "Runner.cpp"
 
 class EndScreen : public Behaviour
 {
@@ -14,15 +15,15 @@ public:
 	void Start ( )
 	{
 		// kat logo
-		std::string credits = "-- Credits --";
-		std::string coda_sinistra = "Director: \n\nProgramming: \nEngine Programming: \nGameplay Programming: \n\nGame Design: \nLevel Design: \n\nStory Director: \nWriter: \n\nArt Director: \nArtist: \nArtist: \nArtist: \n\nMusic:";
-		std::string coda_destra = "EC\n\nEC\nEC\nLG\n\nEC\nLG\n\nCR\nAS\n\nFB\nFB\nAS\nBR\n\nLG";
-		std::string engine = "This projekt was made possible by";
+		std::string title = "Your time is Up";
+
+		Runner * _data = Manager::Objekt_Get ( "player" )->Get_Component < Runner > ( );
+
+		std::string message = "Kills: " + std::to_string ( _data->_kills )
+			+ "\nPoints: " + std::to_string ( _data->_points );
 
 		float new_line = 18;
-
-		auto bg = Manager::Objekt_Load ( "EndScreen_Background", { 0,-50*(new_line-1),0 }, {200,100*new_line,100} );
-		bg->Add_Component < Sprite > ( )->Set ( vec4{0,0,0,1} );
+		
 
 		Manager::Make < Animation < vec3 > > ( "scrool", bg->Expose_Pos ( ), PlayMode::ONCE );
 		auto scrool = Manager::Get < Animation < vec3 > > ( "scrool" );
