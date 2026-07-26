@@ -34,18 +34,19 @@ struct Donation
 {
 	Donation_event trigger = Donation_event::EMPTY_EVENT;
 	std::shared_ptr < Donator > donator = nullptr;
-	std::vector < std::string > mesages;
 	int value = 0;
 
 	float CalculateTime ( ) { return 1; }
-	std::string GetMessage ( ) { return mesages[0]; }
+	std::string GetMessage ( std::string player )
+	{ 
+		return donator->name + " donated " + std::to_string (value) + "s to " + player;
+	}
 
 	Donation (
 		std::shared_ptr < Donator > _donator,
-		std::vector < std::string > _mesages,
 		int _value,
 		Donation_event _trigger
-	) : trigger(_trigger), donator(_donator), mesages(_mesages), value(_value)
+	) : trigger(_trigger), donator(_donator), value(_value)
 	{ }
 
 	Donation ( ) { }
@@ -92,7 +93,7 @@ public:
 			if ( Timer::Get_Time_d ( ) > dono.time )
 			{
 				_chat->Post 
-				( dono.dono->donator->name, dono.dono->GetMessage ( ), MESSAGE_TYPE::SUPER_CHAT );
+				( dono.dono->donator->name, dono.dono->GetMessage ( dono.player ), MESSAGE_TYPE::NOTIFICATION );
 
 				dono.dono->donator->Increase_Affinity ( dono.player, dono.dono->value );
 
@@ -121,11 +122,10 @@ public:
 
 	void New_Objective (
 		std::string donor,
-		std::vector < std::string > messagges,
 		int value,
 		Donation_event trigger
 	) {
-		donations.push_back ( { donators[donor], messagges, value, trigger } );
+		donations.push_back ( { donators[donor], value, trigger } );
 	}
 
 	void PlayerDeath ( std::string player, std::string killer, bool timed_out = false )

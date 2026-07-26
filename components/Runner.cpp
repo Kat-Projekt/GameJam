@@ -32,8 +32,6 @@ public:
 	}
 };
 
-int _Lerp ( int a, int b, float t ) { return a + (b - a) * t; }
-
 class Runner : public Behaviour
 {
 private:
@@ -76,6 +74,10 @@ private:
 			_weapon->obj->Set_2D_Rot ( _angle );
 		}
 	}
+
+	int _kills = 0;
+
+	Donator_Manager* _donation;
 public:
 	Runner ( )
 	{
@@ -84,6 +86,8 @@ public:
 
 	void Start ( ) override
 	{
+		_donation = Manager::Objekt_Get ( "Chat" ) ->Get_Component < Donator_Manager >( );
+
 		_rigid = obj->Add_Component < Rigidbody > ( );
 		obj->Add_Component < Box_Collider > ( )->Set_Size ( obj->Get_Size ( ) );
 		DEBUG ( 3, "Runner Box_Collider size: ", obj->Get_Size ( ) );
@@ -149,15 +153,15 @@ public:
 
 		// configuring animations
 
-		idle_legs->Add_Frame ( 15+0, 15+0, 1, &_Lerp );
-		idle_head->Add_Frame ( 4, 4, 1, &_Lerp );
+		idle_legs->Add_Frame ( 15+0, 15+0, 1 );
+		idle_head->Add_Frame ( 4, 4, 1 );
 
-		walking_legs->Add_Frame ( 15+1, 15+4, 0.3, &_Lerp );
-		walking_head->Add_Frame ( 5, 8, 0.3, &_Lerp );
+		walking_legs->Add_Frame ( 15+1, 15+4, 0.3 );
+		walking_head->Add_Frame ( 5, 8, 0.3 );
 
-		swing_animation->Add_Frame ( 9, 12, 1, &_Lerp );
-		fists_animation->Add_Frame ( 0, 3, 1, &_Lerp );
-		throw_animation->Add_Frame ( 13, 14, 1, &_Lerp );
+		swing_animation->Add_Frame ( 9, 12, 1 );
+		fists_animation->Add_Frame ( 0, 3, 1 );
+		throw_animation->Add_Frame ( 13, 14, 1 );
 
 		// configuring Animator
 		obj->Add_Component < Animator > ( )
@@ -374,14 +378,18 @@ public:
 		DEBUG ( 5, "Player: ", obj->Get_Name ( ), " Prize: ", value );
 		_time += value;
 	}
+
+	void IsKille ( )
+	{
+		_kills ++;
+		_donation->Post ( obj->Get_Name ( ), Donation_event::KILL );
+	}
 	void Killed ( Objekt* killer )
 	{
 		if ( killer == obj && _time > 0 )
 		{ return; }
 
-		Manager::Objekt_Get ( "Chat" )
-			->Get_Component < Donator_Manager >( )
-			->PlayerDeath ( obj->Get_Name ( ), killer->Get_Name ( ), _time < 0 );
+		_donation->PlayerDeath ( obj->Get_Name ( ), killer->Get_Name ( ), _time < 0 );
 
 		killer->Get_Component < Runner > ( )->Reward ( _time / 3.0f );
 		// deactivate this
