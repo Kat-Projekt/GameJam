@@ -126,6 +126,7 @@ public:
 	{
 		if ( !_in_flight ) return;
 		if ( _obj->Has_Component ( "Runner" ) ) return; // il colpo su un runner lo gestisce il runner stesso
+		if ( _obj->Has_Component ( "Weapon" ) ) return;
 		Land ( );
 	}
 };

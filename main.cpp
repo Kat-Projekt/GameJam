@@ -56,6 +56,7 @@ int load ( )
 		Manager::Objekt_Load ( MAIN_CAMERA )->Add_Component < Discrete_Camera > ( )
 	);
 	
+	
 
 
 	return result;

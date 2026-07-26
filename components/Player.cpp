@@ -49,5 +49,9 @@ public:
 		{
 			_puppet->SetAttackDirection ( vec3{dlook,0.0f} );
 		}
+		else
+		{
+			_puppet->Clear_Attack_Direction ( );
+		}
 	}
 };

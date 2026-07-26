@@ -59,7 +59,7 @@ private:
 	float _next_attack_window = 0;
 	float _attack_cooldown = 0.5f;
 
-	const float _punch_hitbox_size = 250.0f;
+	const float _punch_hitbox_size = 150.0f;
 
 	bool _charging_throw = false;
 	float _throw_charge = 0.0f;
@@ -86,6 +86,7 @@ public:
 	{
 		_rigid = obj->Add_Component < Rigidbody > ( );
 		obj->Add_Component < Box_Collider > ( )->Set_Size ( obj->Get_Size ( ) );
+		DEBUG ( 3, "Runner Box_Collider size: ", obj->Get_Size ( ) );
 		
 		auto _testa = std::make_shared < Objekt > ( "testa", vec3{0,0,0}, vec3{200,200,200} );
 		auto _gambe = std::make_shared < Objekt > ( "gambe", vec3{0,0,0}, vec3{200,200,200} );
@@ -440,9 +441,15 @@ public:
 		return _hands.Get_Range ( );
 	}
 
-	void Set_Speed ( float new_speed ) {
+	void Set_Speed ( float new_speed ) 
+	{
 		move_speed = new_speed;
 	} 
+
+	void Clear_Attack_Direction ( ) 
+	{ 
+		_attack_point = vec3(0); 
+	}
 
 	
 };

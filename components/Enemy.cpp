@@ -17,9 +17,9 @@ private:
 	Runner* runner = nullptr;
 	Runner_Manager* runner_manager = nullptr;
 	/* data */
-	float detection_radius = 250.0f;  // Raggio rilevamento nemici
-	float weapon_detection_radius = 400.0f;  // Raggio rilevamento armi
-	float chasing_weapon_detection_radius = 100.0f;  // Raggio rilevamento armi durante inseguimento
+	float detection_radius = 800.0f;  // Raggio rilevamento nemici
+	float weapon_detection_radius = 800.0f;  // Raggio rilevamento armi
+	float chasing_weapon_detection_radius = 250.0f;  // Raggio rilevamento armi durante inseguimento
 
 	// Limiti di tempo per il movimento casuale
 	const float min_move_time = 1.5f;       // Tempo minimo di camminata
@@ -208,6 +208,8 @@ private:
 
 		vec3 to_target = enemy_target->Get_Pos() - obj->Get_Pos();
 		float dist = glm::length(to_target);
+		DEBUG ( 3, "Distanza attuale dal target: ", dist, " range attuale: ", runner->Get_Attack_Range ( ) );
+		
 		float attack_range = runner->Get_Attack_Range ( );
 
 		if (dist <= attack_range)
@@ -217,6 +219,7 @@ private:
 
 			if (attack_cooldown_timer <= 0.0f)
 			{
+				DEBUG ( 3, "TENTATIVO SWING NEMICO" );
 				runner->Swing();
 				attack_cooldown_timer = attack_cooldown;
 			}
@@ -322,5 +325,6 @@ public:
 			Update_PickingWeapon(dt);
 			break;
 		}
+		DEBUG ( 3, "stato attuale nemico: ", (int)current_state );
 	}
 };

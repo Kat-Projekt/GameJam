@@ -40,6 +40,7 @@ public:
 		vec3 collider_size
 	) {
 		auto _weapon = Manager::Objekt_Load ( weapon_name, spawn_point );
+		_weapon->Set_Size ( collider_size );
 
 		_weapon->Add_Component < Box_Collider > ( )
 			->Set_Size ( collider_size )
