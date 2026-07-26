@@ -17,6 +17,26 @@ public:
 	{
 		Informations = { "Scenario", 1.0, "The scenenary load" };
 	}
+	void Load_Obstacle (
+		std::string obstacle_name,
+		ivec2 sprite_grid,
+		int sprite_number,
+		vec3 spawn_point,
+		vec3 collider_size
+	) {
+		auto _obstacle = Manager::Objekt_Load ( obstacle_name, spawn_point );
+		_obstacle->Set_Size ( collider_size );
+
+		_obstacle->Add_Component < Box_Collider > ( )
+			->Set_Size ( collider_size );
+
+		_obstacle->Add_Component < Rigidbody > ( );
+
+		_obstacle->Add_Component < Sprite > ( )
+			->Set ( OBSTACLES_SHEET, "", MAIN_CAMERA, sprite_grid, sprite_number );
+
+		Manager::Objekt_Get ( "Obstacles" )->Add_Child ( _obstacle );
+	}
 
 	void Start ( )
 	{
@@ -24,6 +44,7 @@ public:
 			->Add_Component ( "Background" );
 
 		Manager::Objekt_Load ( "Weapons" );
+		Manager::Objekt_Load ( "Obstacles" );
 		Manager::Objekt_Load ( "Runners" )
 			->Add_Component < Runner_Manager > ( )
 			->Register ( "player", 420, vec4{0,0,1,1}, vec3{0,0,0}, "Player" )
@@ -37,11 +58,14 @@ public:
 
 		Manager::Objekt_Load ( "Chat", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
 
+		Load_Obstacle ( "Container_1", {1,1}, 0, {600,-200,50}, {1200,3000,100} );
+
 		Manager::Objekt_Load ( "Ambient" )
 			->Add_Child ( "Runners")
 			.Add_Child ( "Chat" )
 			.Add_Child ( "Weapons" )
-			.Add_Child ( "Background" );
+			.Add_Child ( "Background" )
+			.Add_Child("Obstacles");
 
 		obj->Add_Child ( "Ambient" );
 		
