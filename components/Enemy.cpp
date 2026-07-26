@@ -264,8 +264,6 @@ private:
 			state_timer = weapon_seek_pause;
 		}
 	}
-
-	Audio_Source* _audio_emitter;
 public:
 	Enemy ( )
 	{
@@ -279,16 +277,10 @@ public:
 		auto runners_obj = Manager::Objekt_Get("Runners");
 		if (runners_obj)
 		{ runner_manager = runners_obj->Get_Component<Runner_Manager>(); }
-
-		Manager::Make < Source > ( obj->Get_Name ( ) );
-
-		_audio_emitter = obj->Add_Component < Audio_Source > ( );
-		_audio_emitter->Set ( obj->Get_Name ( ), "walk" );
 	}
 
 	void Update ( ) override
 	{
-		_audio_emitter->Play ( 0 );
 
 		float dt = Timer::Get_Delta ( );
 

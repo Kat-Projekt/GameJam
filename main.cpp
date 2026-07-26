@@ -1,5 +1,7 @@
 #include "engine.hpp"
 #include "components/file_refes.h"
+#include "extensions/synth/synth.hpp"
+#include "extensions/synth/resources/manager.hpp"
 
 class Discrete_Camera : public Camera
 {
@@ -34,6 +36,14 @@ int load ( )
 	result += Manager::Defaults_Load ( );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD DEFAULTS" ); }
 
+	ReKat::synth::Start ( );
+	Manager::Buffer_Load ( "startup_sound", "Music/Game_Song.wav" );
+	Manager::Source_Load ( "startup_source" );
+	Source* dbg_source = Manager::Source_Get ( "startup_source" );
+	Buffer* dbg_buffer = Manager::Buffer_Get ( "startup_sound" );
+
+	alSourcei ( dbg_source->Get_Source ( ), AL_BUFFER, dbg_buffer->Get_Buffer ( ) );
+	alSourcePlay ( dbg_source->Get_Source ( ) );
 	// textures
 	result += Manager::Make < Texture > ( "logo", "Logo.png" );
 	result += Manager::Make < Texture > ( "noise", "noise.png", 1 );
@@ -58,11 +68,6 @@ int load ( )
 	// camera
 	result += Manager::Camera_Rename ( MAIN_CAMERA, Manager::Objekt_Load ( MAIN_CAMERA )->Add_Component < Discrete_Camera > ( ) );
 	
-	result += Manager::Make < Source > ( "background" );
-	// sfx
-	result += Manager::Make < Buffer > ( "walk", "SFX/walk.wav" );
-	result += Manager::Make < Buffer > ( "death", "SFX/death.wav" );
-	result += Manager::Make < Buffer > ( "pickup", "SFX/pick_weapon.wav" );
 
 	return result;
 }
@@ -79,7 +84,6 @@ int main ( )
 	ReKat::Graphik::_current_window->input._FreamBufferResize = __FreamBufferResize;
 	ReKat::phisiks::Start ( 60 );
 	ReKat::phisiks::Set_Active ( "MainMenu" );
-	ReKat::synth::Start ( );
 
 	load ( );
 
