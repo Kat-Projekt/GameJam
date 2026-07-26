@@ -42,6 +42,8 @@ int load ( )
 	result += Manager::Make < Texture > ( WEAPONS_SHEET, WEAPONS_SHEET_PATH ); // weapons sprite sheet
 	result += Manager::Make < Texture > ( OBSTACLES_SHEET, OBSTACLES_SHEET_PATH ); // obstacles sprite sheet
 	result += Manager::Make < Texture > ( TILES_SHEET, TILES_SHEET_PATH ); // tiles sprite sheet
+	result += Manager::Make < Texture > ( MENU_BLANK_SHEET, MENU_BLANK_SHEET_PATH );
+	result += Manager::Make < Texture > ( MENU_SELECTED_SHEET, MENU_SELECTED_SHEET_PATH );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
 	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders
@@ -84,7 +86,7 @@ int main ( )
 	DEBUG ( 3, "Resources Loaded" );
 
 	Manager::Objekt_Load ( "MainMenu" )->Add_Component ( "MainMenu" );
-	Manager::Objekt_Load ( "Factory" )->Add_Component ( "Scenario" );
+	Manager::Objekt_Load ( "Factory" )->Add_Component ( "Scenario" )->_Start();
 	Manager::Objekt_Load ( "Credits" )->Add_Component ( "EndScreen" );
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
