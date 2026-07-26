@@ -37,7 +37,7 @@ int _Lerp ( int a, int b, float t ) { return a + (b - a) * t; }
 class Runner : public Behaviour
 {
 private:
-	float move_speed = 400.0f;
+	float move_speed = 800.0f;
 	float _time = 30.0f;
 	std::string displaid_time = "";
 

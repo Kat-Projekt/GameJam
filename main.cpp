@@ -73,18 +73,22 @@ int main ( )
 	ReKat::Graphik::Start ( "Font Test", 800, 600, false, false, true );
 	ReKat::Graphik::_current_window->input._FreamBufferResize = __FreamBufferResize;
 	ReKat::phisiks::Start ( 60 );
-	ReKat::phisiks::Set_Active ( "Main menu" );
+	ReKat::phisiks::Set_Active ( "MainMenu" );
 
 	load ( );
 
 	DEBUG ( 3, "Resources Loaded" );
 
-	Manager::Objekt_Load ( "Main menu" )->Add_Component ( "Scenario" );
+	Manager::Objekt_Load ( "MainMenu" )->Add_Component ( "MainMenu" );
+	Manager::Objekt_Load ( "Factory" )->Add_Component ( "Scenario" );
+	Manager::Objekt_Load ( "Credits" )->Add_Component ( "EndScreen" );
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
-		.Set ( NES_CRT_SHADER, "", true )
-		.Set ( Manager::Objekt_Get ( "Main menu" ) );
+	// 	.Set ( NES_CRT_SHADER, "", true )
+		.Set ( Manager::Objekt_Get ( "MainMenu" ) );
+
+	Manager::Camera_Get ( MAIN_CAMERA )->fb_scale = &( Manager::Objekt_Get ( "FrameBuffer" )->Get_Component < Framebuffer > ( )->_aspect_ratio );
 
 	Manager::Set_Active_Scene ( "FrameBuffer" );	
 

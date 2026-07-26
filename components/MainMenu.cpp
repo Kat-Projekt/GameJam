@@ -4,7 +4,8 @@
 
 void ContinueGame ( )
 {
-	DEBUG ( 1,"END" );
+	Manager::Objekt_Get ( "FrameBuffer" )->Get_Component < Framebuffer > ( )->Set ( "Fractory" );
+	ReKat::phisiks::Set_Active ( "Factory" );
 }
 
 class MainMenu : public Behaviour
