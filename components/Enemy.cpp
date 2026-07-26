@@ -20,7 +20,6 @@ private:
 	float detection_radius = 250.0f;  // Raggio rilevamento nemici
 	float weapon_detection_radius = 400.0f;  // Raggio rilevamento armi
 	float chasing_weapon_detection_radius = 100.0f;  // Raggio rilevamento armi durante inseguimento
-	float stopping_distance = 125.0f;   // distanza minima dal target
 
 	// Limiti di tempo per il movimento casuale
 	const float min_move_time = 1.5f;       // Tempo minimo di camminata
@@ -209,8 +208,9 @@ private:
 
 		vec3 to_target = enemy_target->Get_Pos() - obj->Get_Pos();
 		float dist = glm::length(to_target);
+		float attack_range = runner->Get_Attack_Range ( );
 
-		if (dist <= stopping_distance)
+		if (dist <= attack_range)
 		{
 			runner->Stay();
 			runner->SetAttackDirection(to_target);

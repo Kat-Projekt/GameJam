@@ -7,6 +7,11 @@ class Weapon : public Behaviour
 protected:
 	std::string weapon_name;
 
+	float _melee_active_until = 0.0f;
+	const float _melee_active_duration = 0.3f;
+
+	float _range = 350.0f;
+
 	bool _in_flight = false;
 	Objekt* _thrown_by = nullptr;
 
@@ -27,6 +32,8 @@ public:
 		if ( _in_flight ) { return false; }
 		return !obj->Get_Father ( )->Has_Component ( "Runner" );
 	}
+	Weapon* Set_Range ( float range ) { _range = range; return this; }
+	virtual float Get_Range ( ) const { return _range; }
 
 	Weapon* Set_Throw_Speed ( float speed ) { _throw_speed = speed; return this; }
 	float Get_Throw_Speed ( ) const { return _throw_speed; }
@@ -70,13 +77,19 @@ public:
 			if ( _flight_timer <= 0.0f )
 			{ Land ( ); }
 		}
+		if ( !_in_flight && _melee_active_until > 0.0f && Timer::Get_Time ( ) >= _melee_active_until )
+		{
+			if ( auto* col = obj->Get_Component < Box_Collider > ( ) )
+			{ col->Set_Active ( false ); }
+			_melee_active_until = 0.0f;
+		}
 	}
 
 	Weapon* Pick ( )
 	{
 		obj->Set_Pos ( {0,0,0} );
-		obj->Set_Rot_Pivot ( {1,0,0} );
-		obj->Set_2D_Rot ( M_PI/3 );
+		obj->Set_Rot_Pivot ( {-0.6f,-0.6f,0} );
+		obj->Set_2D_Rot ( 0.0f );
 
 		obj->Get_Component < Box_Collider > ( )->Set_Active ( false );
 
@@ -85,7 +98,8 @@ public:
 
 	virtual void Swing ( ) {
 		obj->Get_Component < Box_Collider > ( )->Set_Active ( true );
-		obj->Add_Component < Animator > ( )->Change_Animation ( "swing" );
+		_melee_active_until = Timer::Get_Time ( ) + _melee_active_duration;
+		obj->Get_Component < Animator > ( )->Change_Animation ( "swing" );
 	}
 
 	// returns the number of left usages
@@ -106,5 +120,12 @@ public:
 		{ col->Set_Active ( true ); }
 
 		return 0;
+	}
+
+	void Collision_Trigger_Enter ( Objekt* _obj ) override
+	{
+		if ( !_in_flight ) return;
+		if ( _obj->Has_Component ( "Runner" ) ) return; // il colpo su un runner lo gestisce il runner stesso
+		Land ( );
 	}
 };

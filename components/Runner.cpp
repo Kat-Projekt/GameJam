@@ -59,6 +59,8 @@ private:
 	float _next_attack_window = 0;
 	float _attack_cooldown = 0.5f;
 
+	const float _punch_hitbox_size = 250.0f;
+
 	bool _charging_throw = false;
 	float _throw_charge = 0.0f;
 	const float _max_charge_time = 1.0f;
@@ -172,6 +174,8 @@ public:
 				->Add_Animation ( "throw", throw_animation );
 
 		obj->Get_Component < Animator > ( )->Change_Animation ( "idle" );
+
+		_hands.Set_Range ( _punch_hitbox_size * 0.5f );
 	}
 
 	void Update ( ) override
@@ -387,6 +391,9 @@ public:
 		Weapon * _weapon_componet = _obj->Get_Component < Weapon > ( );
 		if ( _weapon_componet )
 		{
+			if ( !_weapon_componet->Is_In_Flight ( ) && _obj->Get_Father ( ) && _obj->Get_Father ( ).get ( ) == obj )
+			{ return; }
+
 			if ( _weapon_componet->Is_In_Flight ( ) && _weapon_componet->Get_Thrown_By ( ) == obj )
 			{ return; } // non ci si ferisce con la propria arma appena lanciata
 
@@ -424,6 +431,13 @@ public:
 	}
 
 	bool Has_Weapon ( ) const { return _weapon != nullptr; }
+
+	float Get_Attack_Range ( ) const
+	{
+		if ( _weapon ) return _weapon->Get_Range ( );
+		return _hands.Get_Range ( );
+	}
+
 	void Set_Speed ( float new_speed ) {
 		move_speed = new_speed;
 	} 

@@ -48,7 +48,7 @@ public:
 		_weapon->Add_Component < Sprite > ( )
 			->Set ( WEAPONS_SHEET, "", MAIN_CAMERA, {16,1}, sprite_number );
 
-		_weapon->Add_Component < Weap > ( );
+		_weapon->Add_Component < Weap > ( )->Set_Range ( collider_size.x * 0.5f );
 
 		Manager::Objekt_Get ( "Weapons" )->Add_Child ( _weapon );
 
