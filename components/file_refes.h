@@ -10,11 +10,11 @@
 #define OBSTACLES_SHEET "OBSTACLES_SHEET"
 #define OBSTACLES_SHEET_PATH "Sprites/Obstacles.png"
 
-#define CHAT_NAMES "CHAT_NAMES"
 #define CHAT_NAMES_PATH "Chat/Chat_Names.txt"
-
-#define CHAT_MESSAGES "CHAT_MESSAGES"
 #define CHAT_MESSAGES_PATH "Chat/Chat_Messages.txt"
+#define CHAT_COMBO_PATH "Chat/Chat_Combo.txt"
+#define CHAT_KILL_PATH "Chat/Chat_Kill.txt"
+#define CHAT_COMBO_BREAK_PATH "Chat/Chat_Combo_Break.txt"
 
 #define NES_CRT_SHADER "NES_CRT_SHADER"
 #define NES_CRT_SHADER_FS_PATH "Shaders/Nes_Crt_Effect.fs"

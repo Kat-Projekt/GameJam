@@ -4,15 +4,27 @@
 #include <random>
 #include "file_refes.h"
 
+enum class MESSAGE_TYPE
+{
+	CHAT,
+	SUPER_CHAT,
+	NOTIFICATION
+};
+
 class Chat : public Behaviour
 {
 private:
 	List < std::string > chat;
 	List < std::string > super_chat;
+	List < std::string > notification_chat;
 	Text* _text = nullptr;
 	Text* super_text = nullptr;
+	Text* notification_text = nullptr;
 	std::vector < std::string > names;
 	std::vector < std::string > random_messages;
+	std::vector < std::string > kill_messages;
+	std::vector < std::string > combo_messages;
+	std::vector < std::string > combo_break_messages;
 
 	double next_time = 0;
 
@@ -60,13 +72,18 @@ public:
 		super_text = obj->Add_Component < Text > ( );
 		super_text->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
 			->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, false )
-			->Set ( vec4{0.5f,0.5f,0.5f,1.0f} );
+			->Set ( vec4{0.5f,1.0f,0.5f,1.0f} );
+		
+		notification_text = obj->Add_Component < Text > ( );
+		notification_text->Set ( AOVEL_SANS_ROUNDED_FONT, "" )
+			->Set ( "", Text::ALIGNMENT::LEFT, Text::ALIGNMENT::BOTTOM, false )
+			->Set ( vec4{1.0f,0.5f,0.5f,1.0f} );
 
 		names = LoadShit ( CHAT_NAMES_PATH );
 		random_messages = LoadShit ( CHAT_MESSAGES_PATH );
-
-		DEBUG ( 4, names );
-		DEBUG ( 4, random_messages );
+		kill_messages = LoadShit ( CHAT_KILL_PATH );
+		combo_messages = LoadShit ( CHAT_COMBO_PATH );
+		combo_break_messages = LoadShit ( CHAT_COMBO_BREAK_PATH );
 
 		Post ( names[ RandomInt(0,names.size( )-1 ) ], random_messages[RandomInt(0,random_messages.size( )-1 )]);
 	}
@@ -75,22 +92,18 @@ public:
 	{
 		if ( Timer::Get_Time ( ) > next_time )
 		{
-			next_time = Timer::Get_Time ( ) + RandomInt(0,random_messages.size( ) ) / 10;
-			
-			Post ( names[ RandomInt(0,names.size( )-1 ) ], random_messages[RandomInt(0,random_messages.size( )-1 )]);
-
-			if ( !RandomInt(0,5) )
+			next_time = Timer::Get_Time ( ) + RandomInt( 5,10 );
+		
+			if ( RandomInt(0,10) == 0 )
 			{
-				Post ( names[ RandomInt(0,names.size( )-1 ) ], random_messages[RandomInt(0,random_messages.size( )-1 )],true);
+				Post ( names[ RandomInt(0,names.size( )-1 ) ], random_messages[RandomInt(0,random_messages.size( )-1 )], MESSAGE_TYPE::SUPER_CHAT);
+			} else {
+				Post ( names[ RandomInt(0,names.size( )-1 ) ], random_messages[RandomInt(0,random_messages.size( )-1 )]);
 			}
 		}
 	}
 
-	void PlayerDeath ( std::string player )
-	{
-		Post ( "PLAYER_DEATH", player );
-	}
-	void Post ( std::string user, std::string message, bool super = false ) {
+	void Post ( std::string user, std::string message, MESSAGE_TYPE chat_type = MESSAGE_TYPE::CHAT ) {
 		int padd = 0;
 
 		if ( chat.size ( ) > 4 )
@@ -98,20 +111,23 @@ public:
 			padd = chat.size ( ) - 4;
 		}
 
-		if ( user == "PLAYER_DEATH" )
+		switch ( chat_type )
 		{
-			super_chat.append ( message + " is dead" );
-			chat.append ( "" );
-		}
-		else if ( super )
-		{
-			super_chat.append (  user + ": " + message );
-			chat.append ( "" );
-		}
-		else
-		{
-			super_chat.append ( "" );
-			chat.append ( user + ": " + message );
+			case MESSAGE_TYPE::CHAT:
+				notification_chat.append ( "");
+				super_chat.append ( "" );
+				chat.append ( user + ": " + message );
+			break;
+			case MESSAGE_TYPE::SUPER_CHAT:
+				notification_chat.append ( "" );
+				super_chat.append (  user + ": " + message );
+				chat.append ( "" );
+			break;
+			case MESSAGE_TYPE::NOTIFICATION:
+				notification_chat.append ( message );
+				chat.append ( "" );
+				super_chat.append ( "" );
+			break;
 		}
 
 		std::string total_chat = chat[padd];
@@ -125,8 +141,15 @@ public:
 		{
 			total_super_chat += "\n" + super_chat[i];
 		}
+
+		std::string total_notification_chat = notification_chat[padd];
+		for ( size_t i = padd+1; i < notification_chat.size ( ); i++ )
+		{
+			total_notification_chat += "\n" + notification_chat[i];
+		}
 		
 		_text->Set ( total_chat );
 		super_text->Set ( total_super_chat );
+		notification_text->Set ( total_notification_chat );
 	}
 };

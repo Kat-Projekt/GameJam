@@ -3,7 +3,7 @@
 #include <engine.hpp>
 #include "Weapon.cpp"
 #include "file_refes.h"
-#include "Chat.cpp"
+#include "Donator_Manager.cpp"
 
 class Runner; // forward declaration
 
@@ -374,12 +374,15 @@ public:
 		DEBUG ( 5, "Player: ", obj->Get_Name ( ), " Prize: ", value );
 		_time += value;
 	}
-	void Killed ( Objekt* _obj )
+	void Killed ( Objekt* killer )
 	{
-		if ( _obj == obj && _time > 0 )
+		if ( killer == obj && _time > 0 )
 		{ return; }
-		DEBUG ( 3, "Runner: ", obj->Get_Name ( ), " Killed by: ", _obj->Get_Name ( ) );
-		_obj->Get_Component < Runner > ( )->Reward ( _time / 3.0f );
+		Manager::Objekt_Get ( "Chat" )
+			->Get_Component < Donator_Manager >( )
+			->PlayerDeath ( obj->Get_Name ( ), killer->Get_Name ( ), _time < 0 );
+
+		killer->Get_Component < Runner > ( )->Reward ( _time / 3.0f );
 
 		if ( _weapon != nullptr )
 		{
@@ -395,7 +398,7 @@ public:
 
 		// deactivate this
 		obj->Set_Active ( false );
-		Manager::Objekt_Get ( "Chat" )->Get_Component < Chat > ( )->PlayerDeath ( obj->Get_Name ( ) );
+
 	}
 
 	void Collision_Trigger_Enter ( Objekt* _obj ) override
@@ -461,17 +464,15 @@ public:
 	{ 
 		_attack_point = vec3(0); 
 	}
-
-	
 };
 
 void Punch_Hitbox::Collision_Trigger_Enter ( Objekt* _obj )
-	{
-		auto father = obj->Get_Father ( );
-		if ( !father ) return;
+{
+	auto father = obj->Get_Father ( );
+	if ( !father ) return;
 
-		Runner* target = _obj->Get_Component < Runner > ( );
-		if ( !target ) return;
+	Runner* target = _obj->Get_Component < Runner > ( );
+	if ( !target ) return;
 
-		target->Killed ( father.get ( ) );
-	}
+	target->Killed ( father.get ( ) );
+}

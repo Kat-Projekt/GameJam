@@ -4,7 +4,9 @@
 
 void ContinueGame ( )
 {
-	Manager::Objekt_Get ( "FrameBuffer" )->Get_Component < Framebuffer > ( )->Set ( "Fractory" );
+	Manager::Objekt_Get ( "FrameBuffer" )
+		->Get_Component < Framebuffer > ( )
+		->Set ( Manager::Objekt_Get ( "Factory" ) );
 	ReKat::phisiks::Set_Active ( "Factory" );
 }
 
