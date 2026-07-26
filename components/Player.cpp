@@ -15,6 +15,7 @@ public:
 	void Start ( )
 	{
 		_puppet = obj->Get_Component < Runner > ( );
+		_puppet->Set_Speed(450.0f);
 		Manager::Camera_Get ( MAIN_CAMERA )->obj = obj;
 	}
 

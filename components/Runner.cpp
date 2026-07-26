@@ -301,7 +301,9 @@ public:
 
 		if ( _weapon )
 		{
-			vec3 direction = ( _attack_point == vec3(0) ) ? vec3{1,0,0} : _attack_point;
+			vec3 direction = _attack_point;
+			if ( direction == vec3(0) ) { direction = _target_direction; }
+			if ( direction == vec3(0) ) { direction = vec3{1,0,0}; }
 			vec3 holder_pos = obj->Get_Pos ( );
 
 			if ( _weapon->Throw ( direction, strength ) <= 0 )
@@ -422,6 +424,9 @@ public:
 	}
 
 	bool Has_Weapon ( ) const { return _weapon != nullptr; }
+	void Set_Speed ( float new_speed ) {
+		move_speed = new_speed;
+	} 
 
 	
 };

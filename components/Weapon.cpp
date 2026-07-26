@@ -10,7 +10,7 @@ protected:
 	bool _in_flight = false;
 	Objekt* _thrown_by = nullptr;
 
-	float _throw_speed = 900.0f;
+	float _throw_speed = 500.0f;
 	float _flight_timer = 0.0f;
 	const float _max_flight_time = 1.0f;
 public:
@@ -39,8 +39,15 @@ public:
 		_thrown_by = nullptr;
 		if ( auto* rb = obj->Get_Component < Rigidbody > ( ) )
 		{ rb->velocity = vec3{0,0,0}; }
-		if ( auto* col = obj->Get_Component < Box_Collider > ( ) )
-		{ col->Set_Active ( false ); }
+
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//FIX TEMPORANEO PER ALLINEARE LO SPRITE ALLA HITBOX DELL'ARMA SE CON ANIMAZIONE LA ROTAZIONE IN THROW FUNZIONA SI PUO RIMUOVERE
+		obj->Set_Rot_Pivot ( {0,0,0} );
+		obj->Set_2D_Rot ( 0.0f );
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	}
 
 	void Start ( )
