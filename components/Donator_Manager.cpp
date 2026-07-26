@@ -1,7 +1,7 @@
+#pragma once
 #include <engine.hpp>
 
 #include "Chat.cpp"
-#include "Runner.cpp"
 
 enum class Donation_event
 {
@@ -72,10 +72,17 @@ private:
 		Donation_resolution ( ) { }
 	};
 	std::vector <  Donation_resolution > resolution_queue;
+
+	Chat* _chat;
 public:
 	Donator_Manager ( )
 	{
 		Informations = { "Donator_Manager", 1.0, "This is the single donator manager, it describes how a donor behaves" };
+	}
+
+	void Start ( )
+	{
+		_chat = obj->Get_Component < Chat > ( );
 	}
 
 	void Update ( )
@@ -84,14 +91,14 @@ public:
 		{
 			if ( Timer::Get_Time_d ( ) > dono.time )
 			{
-				obj->Get_Component < Chat > ( )->Post 
-				( dono.dono->donator->name, dono.dono->GetMessage ( ), true );
+				_chat->Post 
+				( dono.dono->donator->name, dono.dono->GetMessage ( ), MESSAGE_TYPE::SUPER_CHAT );
 
 				dono.dono->donator->Increase_Affinity ( dono.player, dono.dono->value );
 
-				Manager::Objekt_Get ( dono.player )
-					->Get_Component < Runner > ( )
-					->Reward ( dono.dono->value );
+				// Manager::Objekt_Get ( dono.player )
+				//	->Get_Component < Runner > ( )
+				//	->Reward ( dono.dono->value );
 			}
 		}
 	}
@@ -121,4 +128,15 @@ public:
 		donations.push_back ( { donators[donor], messagges, value, trigger } );
 	}
 
+	void PlayerDeath ( std::string player, std::string killer, bool timed_out = false )
+	{
+		if ( timed_out )
+		{
+			_chat->Post ( "", player + " TIMED OUT", MESSAGE_TYPE::NOTIFICATION );
+		}
+		else
+		{
+			_chat->Post ( "", player + " KILLED BY " + killer, MESSAGE_TYPE::NOTIFICATION );
+		}
+	}
 };

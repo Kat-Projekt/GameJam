@@ -7,6 +7,7 @@ public:
 	Discrete_Camera ( )
 	{
 		Informations = { "Discrete_Camera", 1, "Cadssad" };
+		Scale = 10;
 	}
 
 	glm::mat4 Projkection

@@ -57,6 +57,7 @@ public:
 			->Register_weapon < Shovel > ( "Shovel", 15, {500,-200,0}, {100,280,50} );
 
 		Manager::Objekt_Load ( "Chat", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
+		Manager::Objekt_Get ( "Chat" )->Add_Component ( "Donator_Manager" );
 
 		Load_Obstacle ( "Container_1", {1,1}, 0, {600,-200,50}, {1200,3000,100} );
 
