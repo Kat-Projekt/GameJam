@@ -23,7 +23,7 @@ public:
 		obj->Add_Component ( TmC );
 		obj->Set_Size ( {166.67,166.67,166.67} );
 
-		obj->Set_Pos ( {-4500*ReKat::Graphik::_current_window->Screen_Ratio,-2500,0} );
+		obj->Set_Pos ( {-4500*1.333333,-2500,0} );
 		obj->Inc_Pos ( obj->Get_Size ( ) * 0.5f );
 	}
 };

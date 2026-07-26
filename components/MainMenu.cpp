@@ -1,7 +1,6 @@
 #define DIAGNOSTIC
 #include <engine.hpp>
 #include "file_refes.h"
-
 void ContinueGame ( )
 {
 	Manager::Objekt_Get ( "FrameBuffer" )
@@ -9,63 +8,46 @@ void ContinueGame ( )
 		->Set ( Manager::Objekt_Get ( "Factory" ) );
 	ReKat::phisiks::Set_Active ( "Factory" );
 }
-
 class MainMenu : public Behaviour
 {
 private:
-	Sprite* sprite = nullptr;
+	Sprite* button_visual_sprite = nullptr;
 public:
 	MainMenu ( )
 	{
 		Informations = { "MainMenu", 1.0, "The Chat interface" };
 	}
-
 	void Start ( )
 	{
-		std::shared_ptr < Objekt > title = std::make_shared < Objekt > (
-			"MainMenuTitle",
-			vec3{0,300,0}
-		);
-		title->Add_Component < Text > ( )
-			->Set ( "Killing Time" )
-			->Set ( AOVEL_SANS_ROUNDED_FONT, "" );
-		
+		// oggetto interattivo: rileva mouse/click sull'area del bottone reale
 		std::shared_ptr < Objekt > continue_button = std::make_shared < Objekt > (
 			"MainMenuContinue",
-			vec3{0,-100,0},
+			vec3{380,-280,0},
 			vec3{300,100,0}
 		);
 		continue_button->Add_Component < Button > ( )
 			->OnClick ( ContinueGame )
 			->OnHover ( this, &MainMenu::Hover )
 			->NotHover ( this, &MainMenu::NotHover );
-		
-		sprite = continue_button->Add_Component < Sprite > ( );
-		sprite->Set ( "logo", "", "", {2,1} )->Set ( true );
 
-		obj->Add_Child ( title );
+		// oggetto separato: sprite a schermo intero, mostra blank/selected
+		std::shared_ptr < Objekt > continue_visual = std::make_shared < Objekt > (
+			"MainMenuContinueVisual",
+			vec3{0,0,0},
+			vec3{1333,650,0}
+		);
+		button_visual_sprite = continue_visual->Add_Component < Sprite > ( );
+		button_visual_sprite->Set ( MENU_BLANK_SHEET, "", "", {1,1} )->Set ( true );
+
 		obj->Add_Child ( continue_button );
-
-		DEBUG ( 5, obj );
-		DEBUG ( 5, obj->Get_Child ( "MainMenuTitle" )->Get_Transform ( ) );
-		DEBUG ( 5, obj->Get_Child ( "MainMenuContinue" )->Get_Transform ( )  );	
+		obj->Add_Child ( continue_visual );
 	}
-
-	void Update ( )
-	{
-		DEBUG ( 5, obj->Get_Child ( "MainMenuTitle" )->Get_Transform ( ) );
-		DEBUG ( 5, obj->Get_Child ( "MainMenuContinue" )->Get_Transform ( )  );
-		DEBUG ( 3, obj->Get_Child ( "MainMenuTitle" )->Get_Model_Mat ( ) );
-		DEBUG ( 4, ReKat::Graphik::_current_window->input.mouse_pos );
-	}
-
 	void Hover ( )
 	{
-		sprite->Set ( 1 );
+		button_visual_sprite->Set ( MENU_SELECTED_SHEET );
 	}
-
 	void NotHover ( )
 	{
-		sprite->Set ( 0 );
+		button_visual_sprite->Set ( MENU_BLANK_SHEET );
 	}
 };

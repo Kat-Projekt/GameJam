@@ -44,6 +44,8 @@ int load ( )
 	result += Manager::Make < Texture > ( WEAPONS_SHEET, WEAPONS_SHEET_PATH ); // weapons sprite sheet
 	result += Manager::Make < Texture > ( OBSTACLES_SHEET, OBSTACLES_SHEET_PATH ); // obstacles sprite sheet
 	result += Manager::Make < Texture > ( TILES_SHEET, TILES_SHEET_PATH ); // tiles sprite sheet
+	result += Manager::Make < Texture > ( MENU_BLANK_SHEET, MENU_BLANK_SHEET_PATH );
+	result += Manager::Make < Texture > ( MENU_SELECTED_SHEET, MENU_SELECTED_SHEET_PATH );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD TEXTURES" ); }
 	else { DEBUG ( 4, "SUCCED TO LOAD TEXTURES" ); } 
 	// shaders
@@ -72,23 +74,23 @@ void __FreamBufferResize (GLFWwindow* window, int width, int heigth ) {
 
 int main ( )
 {
-	ReKat::Graphik::Start ( "Font Test", 800, 600, false, false, true );
+	ReKat::Graphik::Start ( "Font Test", 1600, 1200, false, false, true );
 	ReKat::Graphik::_current_window->input._FreamBufferResize = __FreamBufferResize;
 	ReKat::phisiks::Start ( 60 );
-	ReKat::phisiks::Set_Active ( "Factory" );
+	ReKat::phisiks::Set_Active ( "MainMenu" );
 
 	load ( );
 
 	DEBUG ( 3, "Resources Loaded" );
 
 	Manager::Objekt_Load ( "MainMenu" )->Add_Component ( "MainMenu" );
-	Manager::Objekt_Load ( "Factory" )->Add_Component ( "Scenario" );
+	Manager::Objekt_Load ( "Factory" )->Add_Component ( "Scenario" )->_Start();
 	Manager::Objekt_Load ( "Credits" )->Add_Component ( "EndScreen" );
 
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
 	// 	.Set ( NES_CRT_SHADER, "", true )
-		.Set ( Manager::Objekt_Get ( "Factory" ) );
+		.Set ( Manager::Objekt_Get ( "MainMenu" ) );
 
 	Manager::Camera_Get ( MAIN_CAMERA )->fb_scale = &( Manager::Objekt_Get ( "FrameBuffer" )->Get_Component < Framebuffer > ( )->_aspect_ratio );
 
