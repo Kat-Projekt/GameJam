@@ -22,7 +22,7 @@ public:
 			->Add_Component < Runner_Manager > ( )
 			->Register ( "player", 420, vec4{0,0,1,1}, vec3{0,0,0}, "Player" )
 			->Register ( "AI", 67, vec4{1,1,0,1}, vec3{300,300,0}, "Enemy" )
-			->Register_weapon < Club > ( "club", 1, {0,-200,0}, {50,50,50} );
+			->Register_weapon < Club > ( "club", 11, {0,-200,0}, {50,50,50} );
 
 		Manager::Objekt_Load ( "Chat", vec3{660,-475,0}, vec3{50,50,10} )->Add_Component ( "Chat" );
 

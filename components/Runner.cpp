@@ -408,7 +408,9 @@ public:
 				if ( killer )
 				{
 					Killed ( killer );
-					_weapon_componet->Land ( );
+					if ( _weapon_componet->Is_In_Flight ( ) ){
+						_weapon_componet->Land ( );
+					}
 				}
 			}
 		}
