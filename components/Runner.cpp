@@ -37,7 +37,7 @@ int _Lerp ( int a, int b, float t ) { return a + (b - a) * t; }
 class Runner : public Behaviour
 {
 private:
-	float move_speed = 800.0f;
+	float move_speed = 400.0f;
 	float _time = 30.0f;
 	std::string displaid_time = "";
 
@@ -59,7 +59,7 @@ private:
 	float _next_attack_window = 0;
 	float _attack_cooldown = 0.5f;
 
-	const float _punch_hitbox_size = 150.0f;
+	const float _punch_hitbox_size = 200.0f;
 
 	bool _charging_throw = false;
 	float _throw_charge = 0.0f;
@@ -378,12 +378,23 @@ public:
 	{
 		if ( _obj == obj && _time > 0 )
 		{ return; }
-
 		DEBUG ( 3, "Runner: ", obj->Get_Name ( ), " Killed by: ", _obj->Get_Name ( ) );
 		_obj->Get_Component < Runner > ( )->Reward ( _time / 3.0f );
+
+		if ( _weapon != nullptr )
+		{
+			vec3 death_pos = obj->Get_Pos ( );
+			Manager::Objekt_Get ( "Weapons" )
+				->Add_Child ( _weapon->obj->Get_Name ( ) );
+			_weapon->obj->Set_Pos ( death_pos );
+			_weapon->Land ( );
+			if ( auto* col = _weapon->obj->Get_Component < Box_Collider > ( ) )
+			{ col->Set_Active ( true ); }
+			_weapon = nullptr;
+		}
+
 		// deactivate this
 		obj->Set_Active ( false );
-
 		Manager::Objekt_Get ( "Chat" )->Get_Component < Chat > ( )->PlayerDeath ( obj->Get_Name ( ) );
 	}
 

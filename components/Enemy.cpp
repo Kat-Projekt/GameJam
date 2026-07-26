@@ -17,8 +17,8 @@ private:
 	Runner* runner = nullptr;
 	Runner_Manager* runner_manager = nullptr;
 	/* data */
-	float detection_radius = 800.0f;  // Raggio rilevamento nemici
-	float weapon_detection_radius = 800.0f;  // Raggio rilevamento armi
+	float detection_radius = 400.0f;  // Raggio rilevamento nemici
+	float weapon_detection_radius = 400.0f;  // Raggio rilevamento armi
 	float chasing_weapon_detection_radius = 250.0f;  // Raggio rilevamento armi durante inseguimento
 
 	// Limiti di tempo per il movimento casuale
@@ -282,7 +282,6 @@ public:
 
 	void Update ( ) override
 	{
-		
 		float dt = Timer::Get_Delta ( );
 
 		if ( enemy_seek_timeout > 0.0f )

@@ -7,6 +7,7 @@ public:
 	Discrete_Camera ( )
 	{
 		Informations = { "Discrete_Camera", 1, "Cadssad" };
+		//Scale = 10;
 	}
 
 	glm::mat4 Projkection
@@ -56,7 +57,7 @@ int load ( )
 		Manager::Objekt_Load ( MAIN_CAMERA )->Add_Component < Discrete_Camera > ( )
 	);
 	
-	
+
 
 
 	return result;
@@ -73,7 +74,7 @@ int main ( )
 	ReKat::Graphik::Start ( "Font Test", 800, 600, false, false, true );
 	ReKat::Graphik::_current_window->input._FreamBufferResize = __FreamBufferResize;
 	ReKat::phisiks::Start ( 60 );
-	ReKat::phisiks::Set_Active ( "MainMenu" );
+	ReKat::phisiks::Set_Active ( "Factory" );
 
 	load ( );
 
@@ -86,7 +87,7 @@ int main ( )
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
 	// 	.Set ( NES_CRT_SHADER, "", true )
-		.Set ( Manager::Objekt_Get ( "MainMenu" ) );
+		.Set ( Manager::Objekt_Get ( "Factory" ) );
 
 	Manager::Camera_Get ( MAIN_CAMERA )->fb_scale = &( Manager::Objekt_Get ( "FrameBuffer" )->Get_Component < Framebuffer > ( )->_aspect_ratio );
 
