@@ -265,23 +265,31 @@ private:
 		}
 	}
 
+	Audio_Source* _audio_emitter;
 public:
 	Enemy ( )
 	{
 		Informations = { "Enemy", 1.0, "The Count down / life manager" };
 	}
 
-	void Start() override
+	void Start ( ) override
 	{
 		runner = obj->Get_Component<Runner>();
 		state_timer = Get_Random_Pause();
 		auto runners_obj = Manager::Objekt_Get("Runners");
 		if (runners_obj)
 		{ runner_manager = runners_obj->Get_Component<Runner_Manager>(); }
+
+		Manager::Make < Source > ( obj->Get_Name ( ) );
+
+		_audio_emitter = obj->Add_Component < Audio_Source > ( );
+		_audio_emitter->Set ( obj->Get_Name ( ), "walk" );
 	}
 
 	void Update ( ) override
 	{
+		_audio_emitter->Play ( 0 );
+
 		float dt = Timer::Get_Delta ( );
 
 		if ( enemy_seek_timeout > 0.0f )

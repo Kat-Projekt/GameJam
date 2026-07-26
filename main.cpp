@@ -7,8 +7,6 @@ public:
 	Discrete_Camera ( )
 	{
 		Informations = { "Discrete_Camera", 1, "Cadssad" };
-		//Scale = 10;
-		Scale = 10;
 	}
 
 	glm::mat4 Projkection
@@ -50,16 +48,19 @@ int load ( )
 	result += Manager::Make < Shader > ( NES_CRT_SHADER, NES_CRT_SHADER_VS_PATH, NES_CRT_SHADER_FS_PATH );
 	result += Manager::Make < Shader > ( TILEMAP_SHADER, TILEMAP_SHADER_VS_PATH, TILEMAP_SHADER_FS_PATH );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD SHADERS" ); }
+	else { DEBUG ( 4, "SUCCED TO LOAD SHADERS" ); } 
 	// fonts
 	result += Manager::Make < Font > ( AOVEL_SANS_ROUNDED_FONT, AOVEL_SANS_ROUNDED_FONT_PATH, 90 );
 	if ( result ) { DEBUG ( 1, "FAILED TO LOAD FONT" ); }
-
-	Manager::Camera_Rename ( MAIN_CAMERA,
-		Manager::Objekt_Load ( MAIN_CAMERA )->Add_Component < Discrete_Camera > ( )
-	);
+	else { DEBUG ( 4, "SUCCED TO LOAD FONT" ); } 
+	// camera
+	result += Manager::Camera_Rename ( MAIN_CAMERA, Manager::Objekt_Load ( MAIN_CAMERA )->Add_Component < Discrete_Camera > ( ) );
 	
-
-
+	result += Manager::Make < Source > ( "background" );
+	// sfx
+	result += Manager::Make < Buffer > ( "walk", "SFX/walk.wav" );
+	result += Manager::Make < Buffer > ( "death", "SFX/death.wav" );
+	result += Manager::Make < Buffer > ( "pickup", "SFX/pick_weapon.wav" );
 
 	return result;
 }
@@ -72,10 +73,11 @@ void __FreamBufferResize (GLFWwindow* window, int width, int heigth ) {
 
 int main ( )
 {
-	ReKat::Graphik::Start ( "Font Test", 800, 600, false, false, true );
+	ReKat::Graphik::Start ( "Font Test", 800, 600, false, false, true, "Icon.png");
 	ReKat::Graphik::_current_window->input._FreamBufferResize = __FreamBufferResize;
 	ReKat::phisiks::Start ( 60 );
-	ReKat::phisiks::Set_Active ( "Factory" );
+	ReKat::phisiks::Set_Active ( "MainMenu" );
+	ReKat::synth::Start ( );
 
 	load ( );
 
@@ -88,7 +90,7 @@ int main ( )
 	Manager::Objekt_Load ( "FrameBuffer", {0,0,0}, {1333,1000,100} )->Add_Component < Framebuffer > ( )
 		->Set ( 800,600 )
 	// 	.Set ( NES_CRT_SHADER, "", true )
-		.Set ( Manager::Objekt_Get ( "Factory" ) );
+		.Set ( Manager::Objekt_Get ( "MainMenu" ) );
 
 	Manager::Camera_Get ( MAIN_CAMERA )->fb_scale = &( Manager::Objekt_Get ( "FrameBuffer" )->Get_Component < Framebuffer > ( )->_aspect_ratio );
 
